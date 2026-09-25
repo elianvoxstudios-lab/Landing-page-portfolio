@@ -47,11 +47,60 @@ const REEL: { from: number; n: string; title: string; cat: string }[] = [
   { from: 18, n: "07", title: "Low tide", cat: "Film still" },
 ];
 
-const FILTERS = [
-  { f: "all", label: "All", count: 18 },
-  { f: "photo", label: "Photographic", count: 11 },
-  { f: "illus", label: "Illustration", count: 5 },
-  { f: "render", label: "3D and anime", count: 2 },
+const LANES = [
+  { f: "all", label: "All work", count: "18" },
+  { f: "photo", label: "Photographic campaigns", count: "11" },
+  { f: "illus", label: "Illustration", count: "05" },
+  { f: "render", label: "3D and anime", count: "02" },
+];
+
+const SERVICES = [
+  {
+    title: "AI-Infused Production",
+    sub: "Image & video generation with creative direction",
+    desc: "Concept-driven visuals, animated assets and campaign-ready footage. AI tools carry the volume, creative direction keeps every frame on brand.",
+    tags: ["Image generation", "Video generation", "Look development", "Creative direction"],
+  },
+  {
+    title: "Campaign Visuals",
+    sub: "Key art, product and lifestyle imagery",
+    desc: "Photographic campaigns built around one strong idea, shot list to final retouch, sized for every placement you need.",
+    tags: ["Key visuals", "Product & lifestyle", "Art direction", "Retouching"],
+  },
+  {
+    title: "Motion & Post-Production",
+    sub: "Editing, motion design, VFX & colour",
+    desc: "Cut, graded and finished. Mastered wide for the site, cut down vertical for the feed, with sound and captions that hold attention.",
+    tags: ["Edit & colour grade", "Motion graphics", "VFX", "Vertical cutdowns"],
+  },
+  {
+    title: "Character & Illustration",
+    sub: "3D characters, anime key art & illustration",
+    desc: "Characters and worlds with a point of view, designed as still art first and built to animate when you are ready.",
+    tags: ["3D characters", "Anime key art", "Illustration", "Character sheets"],
+  },
+  {
+    title: "Editorial Series",
+    sub: "Story-led image sets for print, web and social",
+    desc: "Multi-frame series with a consistent look, from cover story to lookbook, directed so the whole set reads as one voice.",
+    tags: ["Photo essays", "Lookbooks", "Cover art", "Series direction"],
+  },
+  {
+    title: "Brand & Web Experiences",
+    sub: "Strategy, identity & web design",
+    desc: "Visual identity and a site that moves the way your imagery does, so the brand feels the same in a still, a film and a browser.",
+    tags: ["Brand identity", "Web design", "Motion systems", "Launch assets"],
+  },
+];
+
+const NEEDS = [
+  "AI-infused production",
+  "Campaign visuals",
+  "Motion & post-production",
+  "Character & illustration",
+  "Editorial series",
+  "Brand & web",
+  "Something else",
 ];
 
 export default function Home() {
@@ -173,46 +222,131 @@ export default function Home() {
     if (reduce.matches) (hint as HTMLElement).style.display = "none";
     update();
 
-    // Filters
-    const figsAll = [...document.querySelectorAll<HTMLElement>(".piece")];
-    const btns = [...document.querySelectorAll<HTMLButtonElement>(".filters button")];
-    btns.forEach((b) => {
+    // ===== Showcase wall =====
+    type Item = { n: number; g: string; title: string; cat: string; alt: string; src: string };
+    const DATA: Item[] = PIECES.map((p) => ({
+      n: p.n, g: p.group, title: p.title, cat: p.cat,
+      alt: `${p.title}, ${p.cat.toLowerCase()}`, src: `/images/${p.file}`,
+    }));
+    const wall = document.getElementById("wall")!;
+    const expand = document.getElementById("expand")!;
+    let current = DATA;
+    let swapTimer = 0;
+
+    function tileEl(d: Item, dup: boolean) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "tile2";
+      b.dataset.n = String(d.n);
+      if (dup) {
+        b.tabIndex = -1;
+        b.setAttribute("aria-hidden", "true");
+      } else b.setAttribute("aria-label", "Expand " + d.title);
+      const img = document.createElement("img");
+      img.src = d.src;
+      img.alt = dup ? "" : d.alt;
+      img.decoding = "async";
+      const cap = document.createElement("span");
+      cap.className = "cap";
+      const t = document.createElement("span");
+      t.textContent = d.title;
+      const k = document.createElement("span");
+      k.textContent = d.cat;
+      cap.append(t, k);
+      b.append(img, cap);
+      return b;
+    }
+
+    function buildWall(items: Item[]) {
+      wall.innerHTML = "";
+      const cols = 3;
+      let pool = [...items];
+      while (pool.length < 18) pool = pool.concat(items);
+      const speeds = [78, 96, 70];
+      for (let ci = 0; ci < cols; ci++) {
+        const col = document.createElement("div");
+        col.className = "col" + (ci % 2 ? " down" : "");
+        const shift = document.createElement("div");
+        shift.className = "col-shift";
+        const track = document.createElement("div");
+        track.className = "track";
+        const mine = pool.filter((_, j) => j % cols === ci);
+        track.style.setProperty("--dur", (speeds[ci] * mine.length) / 6 + "s");
+        mine.forEach((d) => track.appendChild(tileEl(d, false)));
+        mine.forEach((d) => track.appendChild(tileEl(d, true)));
+        shift.appendChild(track);
+        col.appendChild(shift);
+        wall.appendChild(col);
+      }
+      const gap = parseFloat(getComputedStyle(wall.querySelector(".track")!).rowGap) || 0;
+      wall.querySelectorAll<HTMLElement>(".track").forEach((tr) => tr.style.setProperty("--gap-half", gap / 2 + "px"));
+    }
+    buildWall(DATA);
+
+    const lanes = [...document.querySelectorAll<HTMLButtonElement>(".lanes button")];
+    lanes.forEach((b) => {
       b.onclick = () => {
-        btns.forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
-        const f = b.dataset.f;
-        figsAll.forEach((fig) => {
-          fig.hidden = !(f === "all" || fig.dataset.group === f);
-        });
+        if (b.getAttribute("aria-pressed") === "true") return;
+        lanes.forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+        current = b.dataset.f === "all" ? DATA : DATA.filter((d) => d.g === b.dataset.f);
+        wall.classList.add("swap");
+        window.clearTimeout(swapTimer);
+        swapTimer = window.setTimeout(() => {
+          buildWall(current);
+          wall.classList.remove("swap");
+        }, 350);
       };
     });
+
+    // "Expand +" bubble follows the pointer over the wall
+    let cx = -300, cy = -300, tx = -300, ty = -300, rafId = 0;
+    function follow() {
+      cx += (tx - cx) * 0.25;
+      cy += (ty - cy) * 0.25;
+      expand.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
+      rafId = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.3 ? requestAnimationFrame(follow) : 0;
+    }
+    const setOver = (on: boolean) => expand.classList.toggle("on", on);
+    const onWallMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      const over = !!(e.target as HTMLElement).closest(".tile2");
+      tx = e.clientX;
+      ty = e.clientY;
+      if (over && !expand.classList.contains("on")) { cx = tx; cy = ty; }
+      setOver(over);
+      if (!rafId) rafId = requestAnimationFrame(follow);
+    };
+    const onWallLeave = () => setOver(false);
+    wall.addEventListener("pointermove", onWallMove);
+    wall.addEventListener("pointerleave", onWallLeave);
 
     // Lightbox
     const lb = document.getElementById("lb") as HTMLDialogElement;
     const lbImg = document.getElementById("lbImg") as HTMLImageElement;
     const lbTitle = document.getElementById("lbTitle")!;
     const lbCount = document.getElementById("lbCount")!;
-    let list: HTMLElement[] = [];
+    let list: Item[] = [];
     let idx = 0;
     function show(i: number) {
       idx = (i + list.length) % list.length;
-      const fig = list[idx];
-      const img = fig.querySelector("img")!;
-      lbImg.src = img.src;
-      lbImg.alt = img.alt;
-      const spans = fig.querySelectorAll("figcaption span");
-      const name = spans[0];
-      const cat = spans[1];
-      lbTitle.textContent = name.textContent + ", " + cat.textContent;
+      const d = list[idx];
+      lbImg.src = d.src;
+      lbImg.alt = d.alt;
+      lbTitle.textContent = d.title + ", " + d.cat;
       lbCount.textContent = idx + 1 + " / " + list.length;
     }
-    figsAll.forEach((fig) => {
-      const tile = fig.querySelector("button.tile") as HTMLButtonElement;
-      tile.onclick = () => {
-        list = figsAll.filter((f) => !f.hidden);
-        show(list.indexOf(fig));
-        lb.showModal();
-      };
-    });
+    function openAt(n: number) {
+      list = current;
+      show(Math.max(0, list.findIndex((d) => d.n === n)));
+      setOver(false);
+      lb.showModal();
+    }
+    const onWallClick = (e: MouseEvent) => {
+      const t = (e.target as HTMLElement).closest<HTMLElement>(".tile2");
+      if (t) openAt(Number(t.dataset.n));
+    };
+    wall.addEventListener("click", onWallClick);
+    (document.getElementById("openAll") as HTMLButtonElement).onclick = () => openAt(current[0].n);
     (document.getElementById("lbClose") as HTMLButtonElement).onclick = () => lb.close();
     (document.getElementById("lbPrev") as HTMLButtonElement).onclick = () => show(idx - 1);
     (document.getElementById("lbNext") as HTMLButtonElement).onclick = () => show(idx + 1);
@@ -246,10 +380,6 @@ export default function Home() {
     st.innerHTML = st.textContent!.trim().split(/\s+/).map((w) => `<span class="w">${w}</span> `).join("");
     const words = [...st.querySelectorAll<HTMLElement>(".w")];
 
-    document.querySelectorAll<HTMLImageElement>("[data-from]").forEach((img) => {
-      const src = document.querySelector<HTMLImageElement>(`.piece img[data-n="${img.dataset.from}"]`);
-      if (src) img.src = src.src;
-    });
     const reel = document.getElementById("reel")!;
     const track = document.getElementById("reelTrack") as HTMLElement;
     const reelBar = document.getElementById("reelBar") as HTMLElement;
@@ -262,22 +392,6 @@ export default function Home() {
       reel.style.height = travel + vh() + "px";
     }
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        let k = 0;
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            (e.target as HTMLElement).style.transitionDelay = "0s";
-            const f = e.target as HTMLElement;
-            setTimeout(() => f.classList.add("in"), (k++ % 3) * 90);
-            io.unobserve(f);
-          }
-        });
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
-    );
-    figsAll.forEach((f) => (RM ? f.classList.add("in") : io.observe(f)));
-
     const contactEl = document.getElementById("contact")!;
     const contactIo = new IntersectionObserver(
       ([e]) => {
@@ -289,7 +403,7 @@ export default function Home() {
 
     const bands = [...document.querySelectorAll<HTMLElement>(".band-row")];
     const talk = document.getElementById("talk")!;
-    const gridImgs = [...document.querySelectorAll<HTMLImageElement>(".piece img")];
+    const showEl = document.getElementById("work")!;
 
     function below() {
       if (RM) return;
@@ -322,16 +436,17 @@ export default function Home() {
         b.style.transform = `translate3d(${d < 0 ? -x : x - half}px,0,0)`;
       });
 
-      gridImgs.forEach((img) => {
-        const b = (img.parentNode as HTMLElement).getBoundingClientRect();
-        if (b.bottom < -50 || b.top > H + 50) return;
-        const off = (b.top + b.height / 2 - H / 2) / H;
-        img.style.setProperty("--py", (off * -38).toFixed(1) + "px");
-      });
+      const sr = showEl.getBoundingClientRect();
+      if (sr.bottom > 0 && sr.top < H) {
+        const off = sr.top + sr.height / 2 - H / 2;
+        wall.querySelectorAll<HTMLElement>(".col-shift").forEach((col, i) => {
+          col.style.transform = `translate3d(0, ${(off * [0.12, -0.08, 0.16][i]).toFixed(1)}px, 0)`;
+        });
+      }
 
       const past = scene.getBoundingClientRect().bottom < H * 0.2;
       const cr = contactEl.getBoundingClientRect();
-      talk.classList.toggle("show", past && cr.top > H * 0.7);
+      talk.classList.toggle("visible", past && cr.top > H * 0.7);
     }
 
     let t2 = false;
@@ -447,7 +562,11 @@ export default function Home() {
       lb.removeEventListener("keydown", onLbKeydown);
       lb.removeEventListener("touchstart", onTouchStart);
       lb.removeEventListener("touchend", onTouchEnd);
-      io.disconnect();
+      window.clearTimeout(swapTimer);
+      cancelAnimationFrame(rafId);
+      wall.removeEventListener("pointermove", onWallMove);
+      wall.removeEventListener("pointerleave", onWallLeave);
+      wall.removeEventListener("click", onWallClick);
       contactIo.disconnect();
       host.innerHTML = "";
     };
@@ -511,6 +630,8 @@ export default function Home() {
             <nav>
               <a href="#work">Work</a>
               &nbsp;&nbsp;&nbsp;
+              <a href="#services">Services</a>
+              &nbsp;&nbsp;&nbsp;
               <a href="#contact">Contact</a>
             </nav>
           </div>
@@ -551,7 +672,7 @@ export default function Home() {
               {REEL.map((c) => (
                 <figure className="card" key={c.from}>
                   <div className="win">
-                    <img data-from={c.from} alt={`${c.title}, ${c.cat.toLowerCase()}`} />
+                    <img src={`/images/${PIECES.find((p) => p.n === c.from)!.file}`} alt={`${c.title}, ${c.cat.toLowerCase()}`} />
                   </div>
                   <figcaption>
                     <span className="n">{c.n}</span>
@@ -589,44 +710,73 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="work" id="work">
-        <div className="work-head">
-          <h2>Selected work</h2>
+      <section className="show" id="work" aria-label="Selected work">
+        <div className="show-copy">
+          <p className="eyebrow">Selected work</p>
+          <h2>
+            Every frame <em>is built</em> to <em>move</em>
+          </h2>
+          <p className="lede">
+            Campaign visuals, editorial series and characters, made with AI and finished by hand. Pick a lane or
+            take in the whole wall.
+          </p>
+          <ul className="lanes" role="list">
+            {LANES.map((l) => (
+              <li key={l.f}>
+                <button type="button" data-f={l.f} aria-pressed={l.f === "all"}>
+                  <span>{l.label}</span>
+                  <span className="k">{l.count}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className="show-cta">
+            <a className="btn" href="#contact">
+              Start a project
+            </a>
+            <button type="button" className="btn ghost" id="openAll">
+              Browse full screen
+            </button>
+          </div>
+        </div>
+        <div className="wall" id="wall" aria-label="Work, click any piece to expand"></div>
+        <div className="expand" id="expand" aria-hidden="true">
+          <span>Expand +</span>
+        </div>
+      </section>
+
+      <section className="services" id="services" aria-label="Services">
+        <div className="services-head">
+          <h2>
+            What we <em>make</em>
+          </h2>
           <p>
-            Photographic campaigns, flat illustration and 3D characters. Every frame is built to move, so most of
-            these exist as motion pieces too.
+            One studio for the image and the motion. Start with a single piece or hand us the whole campaign, from
+            first reference to final export.
           </p>
         </div>
-        <div className="filters" role="group" aria-label="Filter work">
-          {FILTERS.map((f) => (
-            <button key={f.f} type="button" data-f={f.f} aria-pressed={f.f === "all"}>
-              {f.label}
-              <span>{f.count}</span>
-            </button>
+        <ol className="svc">
+          {SERVICES.map((s, i) => (
+            <li key={s.title}>
+              <span className="no">{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3>{s.title}</h3>
+                <p className="sub">{s.sub}</p>
+              </div>
+              <div className="body">
+                <p className="desc">{s.desc}</p>
+                <ul className="tags">
+                  {s.tags.map((t) => (
+                    <li key={t}>{t}</li>
+                  ))}
+                </ul>
+              </div>
+            </li>
           ))}
-        </div>
-        <div className="grid" id="grid">
-          {PIECES.map((p) => (
-            <figure className="piece" data-group={p.group} key={p.n}>
-              <button className="tile" type="button" aria-label={`Open ${p.title}`}>
-                <span className="ph">
-                  <img
-                    data-n={p.n}
-                    src={`/images/${p.file}`}
-                    width={p.w}
-                    height={p.h}
-                    alt={`${p.title}, ${p.cat.toLowerCase()}`}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </span>
-              </button>
-              <figcaption>
-                <span>{p.title}</span>
-                <span>{p.cat}</span>
-              </figcaption>
-            </figure>
-          ))}
+        </ol>
+        <div className="services-cta">
+          <p>Not sure which fits? Tell us what it is for and we will shape the brief with you.</p>
+          <a href="#contact">Start a project</a>
         </div>
       </section>
 
@@ -654,21 +804,11 @@ export default function Home() {
             <fieldset>
               <legend>What do you need?</legend>
               <div className="needs" id="needs">
-                <button type="button" aria-pressed="false">
-                  Campaign visuals
-                </button>
-                <button type="button" aria-pressed="false">
-                  Editorial series
-                </button>
-                <button type="button" aria-pressed="false">
-                  Character design
-                </button>
-                <button type="button" aria-pressed="false">
-                  Motion piece
-                </button>
-                <button type="button" aria-pressed="false">
-                  Something else
-                </button>
+                {NEEDS.map((n) => (
+                  <button key={n} type="button" aria-pressed="false">
+                    {n}
+                  </button>
+                ))}
               </div>
             </fieldset>
             <label>

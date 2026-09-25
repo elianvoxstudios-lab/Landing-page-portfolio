@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Archivo } from "next/font/google";
+import { Archivo, Fraunces } from "next/font/google";
 import "./globals.css";
 
 const archivo = Archivo({
   subsets: ["latin"],
   variable: "--font-archivo",
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  style: ["italic"],
+  variable: "--font-fraunces",
+  axes: ["opsz"],
 });
 
 export const metadata: Metadata = {
@@ -20,7 +27,7 @@ export const viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={archivo.variable}>
+    <html lang="en" className={`${archivo.variable} ${fraunces.variable}`}>
       <body>{children}</body>
     </html>
   );
