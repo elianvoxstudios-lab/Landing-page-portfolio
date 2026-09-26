@@ -7,7 +7,7 @@ const EMAIL = "hello@example.com"; // change this to the real address
 
 type Piece = {
   n: number;
-  group: "photo" | "illus" | "render";
+  group: "photo" | "illus" | "render" | "brand";
   title: string;
   cat: string;
   file: string;
@@ -18,22 +18,31 @@ type Piece = {
 // Document order matters: it drives the CSS-columns masonry fill order.
 const PIECES: Piece[] = [
   { n: 1, group: "photo", title: "Section 13", cat: "Editorial", file: "tile-n01-section-13.webp", w: 900, h: 1200 },
+  { n: 19, group: "brand", title: "Morado cream", cat: "Brand identity", file: "tile-n19-morado-cream.jpg", w: 768, h: 1344 },
   { n: 3, group: "photo", title: "Crater I", cat: "Campaign", file: "tile-n03-crater-i.webp", w: 900, h: 1600 },
   { n: 9, group: "illus", title: "Open book", cat: "Illustration", file: "tile-n09-open-book.webp", w: 900, h: 1600 },
+  { n: 20, group: "brand", title: "Bold flavor", cat: "Food campaign", file: "tile-n20-bold-flavor.jpg", w: 768, h: 1344 },
   { n: 6, group: "photo", title: "Blue hour I", cat: "Portrait", file: "tile-n06-blue-hour-i.webp", w: 900, h: 1600 },
   { n: 14, group: "render", title: "Pursuit", cat: "Anime key art", file: "tile-n14-pursuit.webp", w: 900, h: 1600 },
+  { n: 21, group: "brand", title: "Spotlight energy", cat: "Beauty campaign", file: "tile-n21-spotlight-energy.jpg", w: 768, h: 1344 },
   { n: 8, group: "photo", title: "Serve", cat: "Conceptual", file: "tile-n08-serve.webp", w: 900, h: 1600 },
   { n: 16, group: "photo", title: "Red line", cat: "Editorial", file: "tile-n16-red-line.webp", w: 900, h: 1600 },
+  { n: 22, group: "brand", title: "Street poster", cat: "Out of home", file: "tile-n22-street-poster.jpg", w: 768, h: 1344 },
   { n: 10, group: "illus", title: "Window", cat: "Illustration", file: "tile-n10-window.webp", w: 900, h: 1600 },
   { n: 4, group: "photo", title: "Crater II", cat: "Campaign", file: "tile-n04-crater-ii.webp", w: 900, h: 1600 },
+  { n: 23, group: "brand", title: "Yuzu fizz", cat: "Product campaign", file: "tile-n23-yuzu-fizz.jpg", w: 768, h: 1344 },
   { n: 7, group: "photo", title: "Blue hour II", cat: "Portrait", file: "tile-n07-blue-hour-ii.webp", w: 900, h: 1600 },
   { n: 12, group: "illus", title: "Old master I", cat: "Illustration", file: "tile-n12-old-master-i.webp", w: 900, h: 1600 },
+  { n: 24, group: "brand", title: "Edge key", cat: "Product visual", file: "tile-n24-edge-key.jpg", w: 1344, h: 768 },
   { n: 18, group: "photo", title: "Low tide", cat: "Film still", file: "tile-n18-low-tide.webp", w: 900, h: 1600 },
   { n: 11, group: "render", title: "Night shift", cat: "3D character", file: "tile-n11-night-shift.webp", w: 900, h: 1600 },
+  { n: 26, group: "brand", title: "Gear drop", cat: "Brand illustration", file: "tile-n26-gear-drop.jpg", w: 768, h: 1344 },
   { n: 17, group: "photo", title: "Mirror room", cat: "Editorial", file: "tile-n17-mirror-room.webp", w: 900, h: 1600 },
   { n: 13, group: "illus", title: "Old master II", cat: "Illustration", file: "tile-n13-old-master-ii.webp", w: 900, h: 1600 },
+  { n: 25, group: "brand", title: "Shortcuts", cat: "App campaign", file: "tile-n25-shortcuts.jpg", w: 1344, h: 768 },
   { n: 2, group: "photo", title: "Warm-up", cat: "Studio", file: "tile-n02-warm-up.webp", w: 900, h: 1200 },
   { n: 15, group: "illus", title: "Static", cat: "Illustration", file: "tile-n15-static.webp", w: 900, h: 1600 },
+  { n: 27, group: "brand", title: "Market play", cat: "Brand illustration", file: "tile-n27-market-play.jpg", w: 752, h: 1344 },
   { n: 5, group: "photo", title: "Crater III", cat: "Campaign", file: "tile-n05-crater-iii.webp", w: 900, h: 1600 },
 ];
 
@@ -48,7 +57,8 @@ const REEL: { from: number; n: string; title: string; cat: string }[] = [
 ];
 
 const LANES = [
-  { f: "all", label: "All work", count: "18" },
+  { f: "all", label: "All work", count: "27" },
+  { f: "brand", label: "Brand campaigns", count: "09" },
   { f: "photo", label: "Photographic campaigns", count: "11" },
   { f: "illus", label: "Illustration", count: "05" },
   { f: "render", label: "3D and anime", count: "02" },
