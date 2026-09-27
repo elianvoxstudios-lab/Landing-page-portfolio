@@ -103,6 +103,33 @@ const SERVICES = [
   },
 ];
 
+const WHY = [
+  {
+    title: "Innovation at scale",
+    desc: "Creative that adapts to live data: ads that shift colour or layout depending on who is watching.",
+  },
+  {
+    title: "Faster workflows",
+    desc: "Days of work done in hours, with dozens of variations ready for A/B testing at no extra cost.",
+  },
+  {
+    title: "Lower cost",
+    desc: "Fewer manual hours means more creative output for the same budget.",
+  },
+  {
+    title: "Hyper-personalisation",
+    desc: "Visuals shaped by how your audience actually engages, not one campaign for everyone.",
+  },
+  {
+    title: "Consistent everywhere",
+    desc: "One style and one brand voice across social ads, web banners and print.",
+  },
+  {
+    title: "Built to scale",
+    desc: "Global launches and large campaigns delivered without the usual bottlenecks.",
+  },
+];
+
 const NEEDS = [
   "AI-infused production",
   "Campaign visuals",
@@ -667,6 +694,30 @@ export default function Home() {
           Elian Vox makes images that feel like they are about to move. Campaigns, editorials and characters, built
           frame by frame and ready for motion.
         </p>
+      </section>
+
+      <section className="why" id="why" aria-labelledby="why-title">
+        <div className="why-head">
+          <div>
+            <p className="why-eyebrow">Why choose us</p>
+            <h2 id="why-title">
+              The <em>AI</em> advantage
+            </h2>
+          </div>
+          <p>
+            Choosing an AI creative design agency in 2026 is not just a technical decision. It is a strategic one,
+            and it gives the brands who make it a real edge.
+          </p>
+        </div>
+        <ol className="why-grid">
+          {WHY.map((w, i) => (
+            <li key={w.title}>
+              <span className="no">{String(i + 1).padStart(2, "0")}</span>
+              <h3>{w.title}</h3>
+              <p>{w.desc}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="reel" id="reel" aria-label="Featured work">
