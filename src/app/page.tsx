@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { supabase, supabaseConfigured } from "@/lib/supabase";
 
-const EMAIL = "hello@example.com"; // change this to the real address
+const EMAIL = "elianvoxstudios@gmail.com";
 
 type Piece = {
   n: number;
@@ -201,6 +201,7 @@ export default function Home() {
     const photo = document.getElementById("photo") as HTMLImageElement;
     const hint = document.getElementById("hint")!;
     const title = document.getElementById("title") as HTMLElement;
+    const aiTag = document.getElementById("aiTag") as unknown as SVGGElement;
     const sweepBar = document.getElementById("sweepBar")!;
 
     function render(t: number) {
@@ -234,6 +235,9 @@ export default function Home() {
       const tt = easeOut(range(t, TITLE));
       title.style.opacity = String(tt);
       title.style.transform = `translateY(${(1 - tt) * 24}px)`;
+
+      // "AI animated" callout greets on load, then clears out before the cables arrive
+      aiTag.style.opacity = reduce.matches ? "1" : String(1 - range(t, [0.005, 0.045]));
     }
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -656,6 +660,26 @@ export default function Home() {
                 </g>
               </defs>
               <g id="cables"></g>
+              <g id="aiTag" className="ai-tag">
+                <g className="ai-land">
+                  <text className="ai-txt" x="1195" y="112" textAnchor="end" fontSize="40">
+                    <tspan className="ai-em">AI</tspan> animated
+                  </text>
+                  <g className="ai-nudge">
+                    <path className="ai-line" d="M1090 136C1105 186 1045 232 972 240" pathLength="1" strokeWidth="3" />
+                    <path className="ai-head" d="M987.7 248.6L972 240L985.5 228.2" pathLength="1" strokeWidth="3" />
+                  </g>
+                </g>
+                <g className="ai-port">
+                  <text className="ai-txt" x="600" y="-190" textAnchor="middle" fontSize="64">
+                    <tspan className="ai-em">AI</tspan> animated
+                  </text>
+                  <g className="ai-nudge">
+                    <path className="ai-line" d="M720 -160C800 -120 830 -20 800 90" pathLength="1" strokeWidth="5" />
+                    <path className="ai-head" d="M816.8 76L800 90L792.6 69.4" pathLength="1" strokeWidth="5" />
+                  </g>
+                </g>
+              </g>
               <g id="sweepLayer" clipPath="url(#lenses)" style={{ mixBlendMode: "screen" }}>
                 <rect id="sweepBar" x="-120" y="150" width="120" height="280" fill="url(#sweep)" transform="skewX(-18)" opacity="0" />
               </g>
@@ -689,11 +713,52 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="statement" aria-label="About">
-        <p id="statement">
-          Elian Vox makes images that feel like they are about to move. Campaigns, editorials and characters, built
-          frame by frame and ready for motion.
+      <section className="statement" id="about" aria-labelledby="about-title">
+        <div className="intro-top">
+          <div>
+            <p className="kicker">
+              <i aria-hidden="true"></i>AI creative studio
+            </p>
+            <h2 id="about-title">
+              Redefining <em>creativity</em> with AI
+            </h2>
+          </div>
+          <svg className="badge" viewBox="0 0 120 120" aria-hidden="true">
+            <defs>
+              <path id="badgePath" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0" />
+            </defs>
+            <g className="badge-ring">
+              <text fontSize="9.5" letterSpacing="1.2">
+                <textPath href="#badgePath" textLength="286" lengthAdjust="spacing">
+                  AI-POWERED CREATIVE STUDIO &#8226; ELIAN VOX &#8226;
+                </textPath>
+              </text>
+            </g>
+            <path className="badge-arrow" d="M60 44V76M48 64L60 76L72 64" />
+          </svg>
+        </div>
+        <p className="lead" id="statement">
+          A studio that offers AI-powered creative solutions for brands and agencies, streamlining production
+          timelines and enhancing creative flexibility.
         </p>
+        <div className="intro-cols">
+          <p>Extend your in-house team with AI-powered production that delivers anything you can imagine.</p>
+          <p>
+            Great ideas shouldn&apos;t be held back by time or budget. We combine creative strategy with cutting-edge
+            AI to bring bold concepts to life. Whether it&apos;s a brand film, a product launch or content at scale,
+            we make it impossible to ignore.
+          </p>
+        </div>
+        <div className="intro-foot">
+          <ul className="chips">
+            <li>Brand films</li>
+            <li>Product launches</li>
+            <li>Content at scale</li>
+          </ul>
+          <a className="intro-cta" href="#contact">
+            Start a project <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
       </section>
 
       <section className="why" id="why" aria-labelledby="why-title">
@@ -896,9 +961,9 @@ export default function Home() {
             </div>
             <ul className="socials">
               <li>
-                <a href="https://instagram.com/elianvox" target="_blank" rel="noopener">
+                <a href="https://instagram.com/elianvox.ai" target="_blank" rel="noopener">
                   <span>Instagram</span>
-                  <span>@elianvox</span>
+                  <span>@elianvox.ai</span>
                 </a>
               </li>
               <li>
@@ -908,9 +973,9 @@ export default function Home() {
                 </a>
               </li>
               <li>
-                <a href="https://x.com/elianvox" target="_blank" rel="noopener">
+                <a href="https://x.com/elianvoxx" target="_blank" rel="noopener">
                   <span>X</span>
-                  <span>@elianvox</span>
+                  <span>@elianvoxx</span>
                 </a>
               </li>
               <li>
