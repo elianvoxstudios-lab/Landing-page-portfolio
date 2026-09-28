@@ -301,11 +301,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--steel); outline
 .wall.swap { opacity: 0; }
 .col { position: relative; height: 100%; }
 .col-shift { position: absolute; inset: -180px 0 auto 0; will-change: transform; }
-.track { display: flex; flex-direction: column; gap: clamp(0.6rem, 1vw, 1rem); animation: wall-up var(--dur, 70s) linear infinite; will-change: transform; }
-.col.down .track { animation-name: wall-down; }
-.col:hover .track { animation-play-state: paused; }
-@keyframes wall-up { from { transform: translate3d(0,0,0); } to { transform: translate3d(0, calc(-50% - var(--gap-half, 0px)), 0); } }
-@keyframes wall-down { from { transform: translate3d(0, calc(-50% - var(--gap-half, 0px)), 0); } to { transform: translate3d(0,0,0); } }
+/* Tracks are moved from JS: auto drift plus per-column wheel scrolling */
+.track { display: flex; flex-direction: column; gap: clamp(0.6rem, 1vw, 1rem); will-change: transform; }
 .tile2 {
   position: relative; display: block; width: 100%; padding: 0; border: 0; background: #1c2427;
   border-radius: 10px; overflow: hidden; cursor: pointer;
@@ -345,7 +342,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--steel); outline
   .wall .col:nth-child(3) { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .track { animation: none !important; }
+  .track { transform: none !important; }
   .wall { overflow-y: auto; }
   .col-shift { position: relative; transform: none !important; }
 }

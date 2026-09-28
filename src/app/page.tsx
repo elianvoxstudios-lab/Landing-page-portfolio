@@ -75,7 +75,19 @@ const SERVICES = [
     title: "Campaign Visuals",
     sub: "Ad creative, social assets & key visuals that perform",
     desc: "Scroll-stopping ads and social content built from one campaign idea, then resized for every placement: paid social, display, out of home and marketplace listings. Every set ships with variants ready to A/B test.",
-    tags: ["Paid social & display ads", "Social media kits", "Product & lifestyle", "A/B test variants"],
+    tags: ["Paid social & display ads", "Social media kits", "Product photography", "A/B test variants"],
+  },
+  {
+    title: "Lifestyle Imagery",
+    sub: "Your product in real moments, with real people",
+    desc: "Aspirational lifestyle scenes that put your product in your audience's hands: cast, styled and lit to your brand, in any location or season, without the cost of a location shoot. Ready for web, social, e-commerce and retail.",
+    tags: ["Casting & styling", "Location scenes", "Seasonal refreshes", "E-commerce & retail"],
+  },
+  {
+    title: "Conceptual Advertising",
+    sub: "Big ideas and impossible-to-shoot visuals",
+    desc: "Concept-led ads built on one sharp idea, from mood boards and scripts to surreal visuals no camera could capture. We explore several creative routes fast, then craft the strongest into a campaign people stop and talk about.",
+    tags: ["Concept creation", "Mood boards & scripts", "Surreal visuals", "Campaign routes"],
   },
   {
     title: "Motion & Post-Production",
@@ -133,6 +145,8 @@ const WHY = [
 const NEEDS = [
   "AI-infused production",
   "Campaign visuals",
+  "Lifestyle imagery",
+  "Conceptual advertising",
   "Motion & post-production",
   "Character & illustration",
   "Editorial & print",
@@ -274,6 +288,17 @@ export default function Home() {
     let current = DATA;
     let swapTimer = 0;
 
+    // Each column loops on its own: it drifts automatically, and the wheel/trackpad scrolls just
+    // the column under the pointer. The track holds its tiles twice, so wrapping by one copy is seamless.
+    type Lane = { col: HTMLElement; track: HTMLElement; pos: number; speed: number; pending: number; loop: number };
+    let laneState: Lane[] = [];
+    let hoverCol: HTMLElement | null = null;
+    const laneRo = new ResizeObserver(() => laneState.forEach(measureLane));
+    function measureLane(l: Lane) {
+      const gap = parseFloat(getComputedStyle(l.track).rowGap) || 0;
+      l.loop = (l.track.offsetHeight + gap) / 2;
+    }
+
     function tileEl(d: Item, dup: boolean) {
       const b = document.createElement("button");
       b.type = "button";
@@ -312,15 +337,24 @@ export default function Home() {
         const track = document.createElement("div");
         track.className = "track";
         const mine = pool.filter((_, j) => j % cols === ci);
-        track.style.setProperty("--dur", (speeds[ci] * mine.length) / 6 + "s");
+        track.dataset.dur = String((speeds[ci] * mine.length) / 6);
         mine.forEach((d) => track.appendChild(tileEl(d, false)));
         mine.forEach((d) => track.appendChild(tileEl(d, true)));
         shift.appendChild(track);
         col.appendChild(shift);
         wall.appendChild(col);
       }
-      const gap = parseFloat(getComputedStyle(wall.querySelector(".track")!).rowGap) || 0;
-      wall.querySelectorAll<HTMLElement>(".track").forEach((tr) => tr.style.setProperty("--gap-half", gap / 2 + "px"));
+      laneRo.disconnect();
+      laneState = [...wall.querySelectorAll<HTMLElement>(".col")].map((col) => {
+        const track = col.querySelector<HTMLElement>(".track")!;
+        const l: Lane = { col, track, pos: 0, speed: 0, pending: 0, loop: 0 };
+        measureLane(l);
+        // seconds per loop -> px per second; odd columns drift downward
+        l.speed = (col.classList.contains("down") ? 1 : -1) / Number(track.dataset.dur);
+        if (col.classList.contains("down")) l.pos = -l.loop;
+        laneRo.observe(track);
+        return l;
+      });
     }
     buildWall(DATA);
 
@@ -348,8 +382,40 @@ export default function Home() {
       rafId = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.3 ? requestAnimationFrame(follow) : 0;
     }
     const setOver = (on: boolean) => expand.classList.toggle("on", on);
+
+    const RM_WALL = reduce.matches; // reduced motion: no drift, the wall scrolls natively (see CSS)
+    let laneRaf = 0, laneLast = 0, wallVisible = false;
+    function stepLanes(now: number) {
+      const dt = Math.min(0.05, (now - (laneLast || now)) / 1000);
+      laneLast = now;
+      for (const l of laneState) {
+        if (!l.loop) continue;
+        const auto = l.col === hoverCol || RM_WALL ? 0 : l.speed * l.loop * dt;
+        const manual = l.pending * 0.18;
+        l.pending -= manual;
+        if (Math.abs(l.pending) < 0.1) l.pending = 0;
+        l.pos += auto - manual;
+        l.pos = ((l.pos % l.loop) - l.loop) % l.loop; // keep in (-loop, 0]
+        l.track.style.transform = `translate3d(0, ${l.pos.toFixed(2)}px, 0)`;
+      }
+      laneRaf = wallVisible ? requestAnimationFrame(stepLanes) : 0;
+    }
+    const wallIo = new IntersectionObserver(([e]) => {
+      wallVisible = e.isIntersecting;
+      if (wallVisible && !laneRaf) { laneLast = 0; laneRaf = requestAnimationFrame(stepLanes); }
+    });
+    wallIo.observe(wall);
+    const onWallWheel = (e: WheelEvent) => {
+      const col = (e.target as HTMLElement).closest<HTMLElement>(".col");
+      const l = col && laneState.find((x) => x.col === col);
+      if (!l) return;
+      e.preventDefault();
+      l.pending += e.deltaMode === 1 ? e.deltaY * 32 : e.deltaY;
+    };
+    if (!RM_WALL) wall.addEventListener("wheel", onWallWheel, { passive: false });
     const onWallMove = (e: PointerEvent) => {
       if (e.pointerType !== "mouse") return;
+      hoverCol = (e.target as HTMLElement).closest<HTMLElement>(".col");
       const over = !!(e.target as HTMLElement).closest(".tile2");
       tx = e.clientX;
       ty = e.clientY;
@@ -357,7 +423,10 @@ export default function Home() {
       setOver(over);
       if (!rafId) rafId = requestAnimationFrame(follow);
     };
-    const onWallLeave = () => setOver(false);
+    const onWallLeave = () => {
+      hoverCol = null;
+      setOver(false);
+    };
     wall.addEventListener("pointermove", onWallMove);
     wall.addEventListener("pointerleave", onWallLeave);
 
@@ -605,6 +674,10 @@ export default function Home() {
       lb.removeEventListener("touchend", onTouchEnd);
       window.clearTimeout(swapTimer);
       cancelAnimationFrame(rafId);
+      cancelAnimationFrame(laneRaf);
+      wallIo.disconnect();
+      laneRo.disconnect();
+      wall.removeEventListener("wheel", onWallWheel);
       wall.removeEventListener("pointermove", onWallMove);
       wall.removeEventListener("pointerleave", onWallLeave);
       wall.removeEventListener("click", onWallClick);
