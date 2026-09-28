@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, Fraunces } from "next/font/google";
 import "./globals.css";
+import { DEFAULT_OG, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -16,7 +17,22 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Elian Vox, motion and image design",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Elian Vox | AI-Powered Creative & Social Media Studio",
+    template: "%s | Elian Vox",
+  },
+  description:
+    "Campaigns, content and social systems that make brands impossible to ignore. AI-powered creative and social media studio.",
+  openGraph: {
+    siteName: SITE_NAME,
+    type: "website",
+    title: "Elian Vox | AI-Powered Creative & Social Media Studio",
+    description: "Campaigns, content and social systems that make brands impossible to ignore.",
+    url: "/",
+    images: [{ url: DEFAULT_OG }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport = {
