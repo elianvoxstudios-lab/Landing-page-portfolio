@@ -73,27 +73,27 @@ const SERVICES = [
   },
   {
     title: "Campaign Visuals",
-    sub: "Key art, product and lifestyle imagery",
-    desc: "Photographic campaigns built around one strong idea, shot list to final retouch, sized for every placement you need.",
-    tags: ["Key visuals", "Product & lifestyle", "Art direction", "Retouching"],
+    sub: "Ad creative, social assets & key visuals that perform",
+    desc: "Scroll-stopping ads and social content built from one campaign idea, then resized for every placement: paid social, display, out of home and marketplace listings. Every set ships with variants ready to A/B test.",
+    tags: ["Paid social & display ads", "Social media kits", "Product & lifestyle", "A/B test variants"],
   },
   {
     title: "Motion & Post-Production",
-    sub: "Editing, motion design, VFX & colour",
-    desc: "Cut, graded and finished. Mastered wide for the site, cut down vertical for the feed, with sound and captions that hold attention.",
-    tags: ["Edit & colour grade", "Motion graphics", "VFX", "Vertical cutdowns"],
+    sub: "Video production & motion design at scale",
+    desc: "Brand films, product videos and animated ads produced end to end, plus motion design for websites, ads and presentations. Mastered wide for launch, cut vertical for Reels, TikTok and Shorts, with colour, sound and captions finished.",
+    tags: ["Brand & product films", "Animated ads", "Motion design", "Vertical cutdowns"],
   },
   {
     title: "Character & Illustration",
-    sub: "3D characters, anime key art & illustration",
-    desc: "Characters and worlds with a point of view, designed as still art first and built to animate when you are ready.",
-    tags: ["3D characters", "Anime key art", "Illustration", "Character sheets"],
+    sub: "Mascots, 3D characters & visual storytelling",
+    desc: "Brand mascots, 3D characters and custom illustration systems that give your brand a face people remember. Delivered with character sheets and poses so they work across ads, packaging, social and animation.",
+    tags: ["Brand mascots", "3D characters", "Illustration systems", "Anime key art"],
   },
   {
-    title: "Editorial Series",
-    sub: "Story-led image sets for print, web and social",
-    desc: "Multi-frame series with a consistent look, from cover story to lookbook, directed so the whole set reads as one voice.",
-    tags: ["Photo essays", "Lookbooks", "Cover art", "Series direction"],
+    title: "Editorial & Print",
+    sub: "eBooks, reports, decks, print & packaging",
+    desc: "Long-form design that holds attention: eBooks, reports, lookbooks and pitch decks that tell your story, plus print, packaging and merch that carry the campaign off the screen and onto the shelf.",
+    tags: ["eBooks & reports", "Presentation design", "Lookbooks", "Print & packaging"],
   },
   {
     title: "Brand & Web Experiences",
@@ -135,7 +135,7 @@ const NEEDS = [
   "Campaign visuals",
   "Motion & post-production",
   "Character & illustration",
-  "Editorial series",
+  "Editorial & print",
   "Brand & web",
   "Something else",
 ];
@@ -201,7 +201,7 @@ export default function Home() {
     const photo = document.getElementById("photo") as HTMLImageElement;
     const hint = document.getElementById("hint")!;
     const title = document.getElementById("title") as HTMLElement;
-    const aiTag = document.getElementById("aiTag") as unknown as SVGGElement;
+    const heroTag = document.getElementById("heroTag") as unknown as SVGGElement;
     const sweepBar = document.getElementById("sweepBar")!;
 
     function render(t: number) {
@@ -236,8 +236,8 @@ export default function Home() {
       title.style.opacity = String(tt);
       title.style.transform = `translateY(${(1 - tt) * 24}px)`;
 
-      // "AI animated" callout greets on load, then clears out before the cables arrive
-      aiTag.style.opacity = reduce.matches ? "1" : String(1 - range(t, [0.005, 0.045]));
+      // Tagline greets on load, then clears out as the cables plug in
+      heroTag.style.opacity = reduce.matches ? "1" : String(1 - range(t, [0.18, 0.34]));
     }
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -660,24 +660,23 @@ export default function Home() {
                 </g>
               </defs>
               <g id="cables"></g>
-              <g id="aiTag" className="ai-tag">
-                <g className="ai-land">
-                  <text className="ai-txt" x="1195" y="112" textAnchor="end" fontSize="40">
-                    <tspan className="ai-em">AI</tspan> animated
-                  </text>
-                  <g className="ai-nudge">
-                    <path className="ai-line" d="M1090 136C1105 186 1045 232 972 240" pathLength="1" strokeWidth="3" />
-                    <path className="ai-head" d="M987.7 248.6L972 240L985.5 228.2" pathLength="1" strokeWidth="3" />
-                  </g>
+              <g id="heroTag" className="hero-tag">
+                <g className="tag-land">
+                  <text className="serif d1" x="392" y="520" textAnchor="end" fontSize="80">First</text>
+                  <text className="d2" x="392" y="572" textAnchor="end" fontSize="42">AI-Powered</text>
+                  <text className="small d5" x="390" y="614" textAnchor="end" fontSize="14">EST. 2026</text>
+                  <text className="d3" x="952" y="520" fontSize="42">Creative</text>
+                  <text className="serif d4" x="950" y="590" fontSize="80">Studio</text>
+                  <text className="small d5" x="954" y="632" fontSize="14">ELIAN VOX</text>
                 </g>
-                <g className="ai-port">
-                  <text className="ai-txt" x="600" y="-190" textAnchor="middle" fontSize="64">
-                    <tspan className="ai-em">AI</tspan> animated
+                <g className="tag-port">
+                  <text className="small d1" x="688" y="-330" textAnchor="middle" fontSize="26">ELIAN VOX &#183; EST. 2026</text>
+                  <text className="d2" x="688" y="-230" textAnchor="middle" fontSize="78">
+                    <tspan className="serif">First</tspan> AI-Powered
                   </text>
-                  <g className="ai-nudge">
-                    <path className="ai-line" d="M720 -160C800 -120 830 -20 800 90" pathLength="1" strokeWidth="5" />
-                    <path className="ai-head" d="M816.8 76L800 90L792.6 69.4" pathLength="1" strokeWidth="5" />
-                  </g>
+                  <text className="d3" x="688" y="-140" textAnchor="middle" fontSize="78">
+                    Creative <tspan className="serif">Studio</tspan>
+                  </text>
                 </g>
               </g>
               <g id="sweepLayer" clipPath="url(#lenses)" style={{ mixBlendMode: "screen" }}>
