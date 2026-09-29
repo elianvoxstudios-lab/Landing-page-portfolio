@@ -10,6 +10,7 @@
   --line: #c9d0d4;
   --chip: #dde2e4;
   --accent: #2458f0;
+  --font-display: var(--font-matcha), "Matcha World", var(--font-archivo), "Archivo", sans-serif;
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -719,3 +720,32 @@ dialog.lb::backdrop { background: transparent; }
   .ind-tile-body span { font-size: 0.8125rem; }
   .ind-tile-empty { font-size: 1.1rem; padding: 0.9rem; }
 }
+
+/* ===== Display face: Matcha World =====
+   Rounded, caps-only, single weight. Headlines and the wordmark only; body and UI stay Archivo,
+   and the <em> accent word stays Fraunces italic (its own rules win on specificity).
+   Real weight only (no faux bold), slightly open tracking so the bubbles don't collide,
+   and the biggest sizes trimmed ~8% because it runs wider than expanded Archivo. */
+.bar .mark, .sub-bar .mark,
+.h1-line,
+.statement h2, .why-head h2, .services-head h2,
+.why-grid h3, .svc h3, .reel-head h2,
+.band-row, .show h2, .contact h2,
+.ind-teaser h2, .sec-head h2, .page-head h1, .ind-hero h1, .cta-band h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-stretch: normal;
+  font-synthesis: none;
+  letter-spacing: 0.01em;
+}
+.bar .mark, .sub-bar .mark { line-height: 1; }
+.h1-line { line-height: 1.02; }
+.statement h2, .why-head h2, .services-head h2 { font-size: clamp(2.3rem, 5.9vw, 5.5rem); line-height: 0.98; }
+.why-grid h3 { line-height: 1.08; }
+.svc h3, .reel-head h2 { line-height: 1.05; }
+.band-row { font-size: clamp(2.75rem, 8.3vw, 8rem); line-height: 1; }
+.show h2 { font-size: clamp(2.4rem, 5vw, 5.25rem); line-height: 1; }
+.contact h2 { font-size: clamp(2.5rem, 7.7vw, 7.5rem); line-height: 0.95; }
+.ind-teaser h2, .sec-head h2 { line-height: 1; }
+.page-head h1, .ind-hero h1 { font-size: clamp(2.4rem, 6.4vw, 6rem); line-height: 0.98; }
+.cta-band h2 { line-height: 1.02; }

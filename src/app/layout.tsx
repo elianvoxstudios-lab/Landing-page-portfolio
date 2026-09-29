@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Fraunces } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { DEFAULT_OG, SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -7,6 +8,15 @@ const archivo = Archivo({
   subsets: ["latin"],
   variable: "--font-archivo",
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
+// Display face for headlines and the wordmark (caps-only, one weight).
+const matcha = localFont({
+  src: "./fonts/MatchaWorld.woff2",
+  weight: "400",
+  style: "normal",
+  variable: "--font-matcha",
+  display: "swap",
 });
 
 const fraunces = Fraunces({
@@ -43,7 +53,7 @@ export const viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${archivo.variable} ${fraunces.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${fraunces.variable} ${matcha.variable}`}>
       <body>{children}</body>
     </html>
   );
