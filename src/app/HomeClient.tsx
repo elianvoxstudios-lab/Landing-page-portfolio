@@ -61,11 +61,15 @@ const PIECES: Piece[] = [
   { n: 15, group: "illus", title: "Static", cat: "Illustration", file: "tile-n15-static.webp", w: 900, h: 1600 },
   { n: 27, group: "brand", title: "Market play", cat: "Brand illustration", file: "tile-n27-market-play.jpg", w: 752, h: 1344 },
   { n: 5, group: "photo", title: "Crater III", cat: "Campaign", file: "tile-n05-crater-iii.webp", w: 900, h: 1600 },
+  { n: 28, group: "brand", title: "Tomato wall", cat: "Out of home", file: "tile-n28-tomato-wall.webp", w: 768, h: 1344 },
+  { n: 29, group: "brand", title: "Locker fizz", cat: "Packaging", file: "tile-n29-locker-fizz.webp", w: 768, h: 1344 },
+  { n: 30, group: "brand", title: "Your edge", cat: "Product render", file: "tile-n30-keycap.webp", w: 1344, h: 768 },
+  { n: 31, group: "brand", title: "Gadget stand", cat: "Illustrated ad", file: "tile-n31-gadget-stand.webp", w: 768, h: 1344 },
 ];
 
 const LANES = [
-  { f: "all", label: "All work", count: "27" },
-  { f: "brand", label: "Brand campaigns", count: "09" },
+  { f: "all", label: "All work", count: "31" },
+  { f: "brand", label: "Brand campaigns", count: "13" },
   { f: "photo", label: "Photographic campaigns", count: "11" },
   { f: "illus", label: "Illustration", count: "05" },
   { f: "render", label: "3D and anime", count: "02" },
@@ -422,6 +426,35 @@ export default function HomeClient({ featured }: { featured: Featured[] }) {
     lb.addEventListener("touchstart", onTouchStart, { passive: true });
     lb.addEventListener("touchend", onTouchEnd);
 
+    // Launch film: muted loop in the hero, full film with sound in a dialog
+    const launch = document.getElementById("launch") as HTMLButtonElement;
+    const launchPreview = document.getElementById("launchPreview") as HTMLVideoElement;
+    const film = document.getElementById("film") as HTMLDialogElement;
+    const filmVideo = document.getElementById("filmVideo") as HTMLVideoElement;
+    const playPreview = () => {
+      if (reduce.matches) return;
+      launchPreview.muted = true;
+      launchPreview.play().catch(() => {});
+    };
+    playPreview();
+    launch.onclick = () => {
+      launchPreview.pause();
+      film.showModal();
+      filmVideo.currentTime = 0;
+      filmVideo.muted = false;
+      filmVideo.play().catch(() => {});
+    };
+    (document.getElementById("filmClose") as HTMLButtonElement).onclick = () => film.close();
+    const onFilmBackdrop = (e: MouseEvent) => {
+      if (e.target === film || (e.target as HTMLElement).classList.contains("lb-inner")) film.close();
+    };
+    film.addEventListener("click", onFilmBackdrop);
+    const onFilmClose = () => {
+      filmVideo.pause();
+      playPreview();
+    };
+    film.addEventListener("close", onFilmClose);
+
     // ===== Everything below the hero =====
     const RM = reduce.matches;
     const vh = () => window.innerHeight;
@@ -644,6 +677,8 @@ export default function HomeClient({ featured }: { featured: Featured[] }) {
       lb.removeEventListener("keydown", onLbKeydown);
       lb.removeEventListener("touchstart", onTouchStart);
       lb.removeEventListener("touchend", onTouchEnd);
+      film.removeEventListener("click", onFilmBackdrop);
+      film.removeEventListener("close", onFilmClose);
       window.clearTimeout(swapTimer);
       cancelAnimationFrame(rafId);
       cancelAnimationFrame(laneRaf);
@@ -743,6 +778,27 @@ export default function HomeClient({ featured }: { featured: Featured[] }) {
               </a>
             </div>
           </div>
+
+          <button type="button" className="launch" id="launch" aria-label="Play the Elian Vox launch film with sound">
+            <video
+              id="launchPreview"
+              src="/video/launch-film-preview.mp4"
+              poster="/video/launch-film-poster.jpg"
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+            />
+            <span className="launch-tag">New</span>
+            <span className="launch-cap">
+              <span className="launch-play" aria-hidden="true"></span>
+              <span>
+                <b>Launch film</b>
+                <small>0:20, sound on</small>
+              </span>
+            </span>
+          </button>
         </div>
       </section>
 
@@ -1084,6 +1140,18 @@ export default function HomeClient({ featured }: { featured: Featured[] }) {
           <button type="button" id="lbNext">
             Next
           </button>
+        </div>
+      </dialog>
+
+      <dialog className="lb film" id="film" aria-label="Launch film">
+        <div className="lb-top">
+          <span>Elian Vox, launch film</span>
+          <button type="button" id="filmClose">
+            Close
+          </button>
+        </div>
+        <div className="lb-inner">
+          <video id="filmVideo" src="/video/launch-film.mp4" poster="/video/launch-film-poster.jpg" controls playsInline preload="none" />
         </div>
       </dialog>
     </>
