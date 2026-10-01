@@ -102,7 +102,10 @@ const WHY = [
   },
 ];
 
-export default function HomeClient({ featured }: { featured: Featured[] }) {
+/** Full-screen film above "The AI advantage" (only when the file is in public/video). */
+export type WideFilm = { src: string; poster?: string };
+
+export default function HomeClient({ featured, wideFilm }: { featured: Featured[]; wideFilm: WideFilm | null }) {
   useEffect(() => {
     const NS = "http://www.w3.org/2000/svg";
     const ROUTES = [
@@ -849,6 +852,12 @@ export default function HomeClient({ featured }: { featured: Featured[] }) {
           </a>
         </div>
       </section>
+
+      {wideFilm && (
+        <section className="wide-film" aria-label="Elian Vox services film">
+          <MediaView src={wideFilm.src} poster={wideFilm.poster} alt="Elian Vox services film" kind="video" width={1920} height={1080} />
+        </section>
+      )}
 
       <section className="why" id="why" aria-labelledby="why-title">
         <div className="why-head">
