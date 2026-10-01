@@ -7,6 +7,7 @@ import { SERVICES } from "@/data/services";
 import { INDUSTRIES } from "@/data/industries";
 import MediaView from "@/components/MediaView";
 import SiteFooter from "@/components/SiteFooter";
+import WideFilmPlayer from "@/components/WideFilm";
 
 /** One featured piece per industry, read from public/featured/ by app/page.tsx. */
 export type Featured = {
@@ -854,9 +855,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
       </section>
 
       {wideFilm && (
-        <section className="wide-film" aria-label="Elian Vox services film">
-          <MediaView src={wideFilm.src} poster={wideFilm.poster} alt="Elian Vox services film" kind="video" width={1920} height={1080} />
-        </section>
+        <WideFilmPlayer src={wideFilm.src} poster={wideFilm.poster} label="Elian Vox services film" />
       )}
 
       <section className="why" id="why" aria-labelledby="why-title">

@@ -798,6 +798,48 @@ dialog.lb::backdrop { background: transparent; }
 .page-head h1, .ind-hero h1 { font-size: clamp(2.4rem, 6.4vw, 6rem); line-height: 0.98; }
 .cta-band h2 { line-height: 1.02; }
 
-/* Full-screen film above "The AI advantage" */
-.wide-film { width: 100%; height: 100svh; overflow: hidden; background: #000; }
-.wide-film video { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Film above "The AI advantage": Fill (edge to edge) on landscape screens, Fit (whole 16:9
+   frame) on portrait ones, unless the viewer picks with the on-video controls */
+.wide-film { position: relative; width: 100%; background: #000; color: #f2f4f5; margin-bottom: clamp(3rem, 8vh, 5rem); }
+.wf-stage { position: relative; }
+.wf-stage video { display: block; width: 100%; background: #000; }
+/* Fill */
+.wide-film .wf-stage, .wide-film[data-mode="fill"] .wf-stage { height: 100svh; }
+.wide-film video, .wide-film[data-mode="fill"] video { height: 100%; object-fit: cover; }
+/* Fit */
+.wide-film[data-mode="fit"] .wf-stage { height: auto; }
+.wide-film[data-mode="fit"] video { height: auto; aspect-ratio: 16 / 9; max-height: 100svh; object-fit: contain; }
+@media (max-aspect-ratio: 1/1) {
+  .wide-film:not([data-mode]) .wf-stage { height: auto; }
+  .wide-film:not([data-mode]) video { height: auto; aspect-ratio: 16 / 9; object-fit: contain; }
+}
+
+.wf-controls {
+  position: absolute; right: clamp(0.75rem, 2.5vw, 2rem); bottom: clamp(0.75rem, 2.5vw, 2rem);
+  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.4rem; z-index: 2;
+}
+.wf-controls button, .wf-bar button {
+  font: inherit; font-size: 0.8125rem; font-weight: 600; color: #fff; cursor: pointer;
+  background: rgba(10, 12, 14, 0.62); border: 1px solid rgba(255, 255, 255, 0.28); border-radius: 999px;
+  padding: 0.5rem 0.85rem; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.wf-controls button:hover, .wf-bar button:hover { background: rgba(10, 12, 14, 0.85); }
+.wf-controls button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
+/* Fit / Fill segmented label: the active one is bright */
+.wf-fit, .wf-fill { opacity: 0.5; }
+.wf-fit::after { content: " / "; opacity: 0.6; }
+.wide-film[data-mode="fit"] .wf-fit, .wide-film[data-mode="fill"] .wf-fill { opacity: 1; }
+.wide-film:not([data-mode]) .wf-fill { opacity: 1; }
+@media (max-aspect-ratio: 1/1) {
+  .wide-film:not([data-mode]) .wf-fill { opacity: 0.5; }
+  .wide-film:not([data-mode]) .wf-fit { opacity: 1; }
+  /* On phones a fitted 16:9 frame is short: controls sit under it instead of covering the picture.
+     In Fill mode the video owns the whole screen, so they float over it as on desktop. */
+  .wide-film:not([data-mode="fill"]) .wf-controls { position: static; justify-content: center; padding: 0.6rem 0.75rem 0.8rem; }
+  .wf-controls button { font-size: 0.75rem; padding: 0.45rem 0.7rem; }
+}
+.wf-bar {
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  padding: 0.85rem clamp(1.25rem, 5vw, 5rem); font-size: 0.9375rem;
+}
+.wf-bar button { background: var(--accent); border-color: var(--accent); }
