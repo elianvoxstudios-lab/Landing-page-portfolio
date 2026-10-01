@@ -1,0 +1,48 @@
+# Downloads the launch film and new portfolio tiles from CloudFront, checks each file's
+# byte size, and commits them into public/ so the site no longer depends on those links.
+# Runs once when this file lands on main; can be re-run from the Actions tab.
+name: Fetch media into the repo
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/fetch-media.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download and size-check
+        run: |
+          set -euo pipefail
+          BASE=https://d2ol7oe51mr4n9.cloudfront.net/user_36WxUSeVk7hMjXTiDh8zXuMvQbW
+          mkdir -p public/video public/images
+          while read -r dest id bytes; do
+            curl -fsSL --retry 3 -o "$dest" "$BASE/$id"
+            got=$(stat -c %s "$dest")
+            if [ "$got" != "$bytes" ]; then echo "::error::$dest is $got bytes, expected $bytes"; exit 1; fi
+            echo "ok $dest $bytes"
+          done <<'EOF'
+          public/video/launch-film.mp4 6bb6df39-bbae-4e14-962b-e475983bbafa.mp4 4600232
+          public/video/launch-film-preview.mp4 9e5d9479-2505-4ea9-9e50-7334c9af1298.mp4 1089148
+          public/video/launch-film-poster.jpg a5985868-b7ee-480d-a2f7-788acbaec799.jpg 28305
+          public/images/tile-n28-tomato-wall.webp e166ab41-f671-48a9-ac7c-758007d51cee.webp 216680
+          public/images/tile-n29-locker-fizz.webp 33cf31b4-9186-409b-ae86-8faba073835a.webp 125136
+          public/images/tile-n30-keycap.webp 02ccce25-242d-4dbc-b8a1-1df7cb24a6c2.webp 104930
+          public/images/tile-n31-gadget-stand.webp 62818bc8-2046-4182-ba9f-8b0fdd60179a.webp 93892
+          EOF
+
+      - name: Commit the files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/video public/images
+          if git diff --cached --quiet; then echo "Already committed, nothing to do"; exit 0; fi
+          git commit -m "Add launch film and new portfolio tiles to the repo"
+          git push
