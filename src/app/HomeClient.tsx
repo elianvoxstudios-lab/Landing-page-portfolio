@@ -8,6 +8,7 @@ import { INDUSTRIES } from "@/data/industries";
 import MediaView from "@/components/MediaView";
 import SiteFooter from "@/components/SiteFooter";
 import WideFilmPlayer from "@/components/WideFilm";
+import IntroFilm from "@/components/IntroFilm";
 
 /** One featured piece per industry, read from public/featured/ by app/page.tsx. */
 export type Featured = {
@@ -830,6 +831,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
             <path className="badge-arrow" d="M60 44V76M48 64L60 76L72 64" />
           </svg>
         </div>
+        <IntroFilm src="/video/brand-intro.mp4" poster="/video/brand-intro-poster.jpg" label="Elian Vox brand intro" />
         <p className="lead" id="statement">
           A studio that offers AI-powered creative solutions for brands and agencies, streamlining production
           timelines and enhancing creative flexibility.

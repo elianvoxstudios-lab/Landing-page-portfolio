@@ -166,6 +166,23 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--steel); outline
 }
 @media (prefers-reduced-motion: reduce) { .badge-ring, .kicker i { animation: none; } }
 
+/* Brand intro film under "Redefining creativity with AI" */
+.intro-film {
+  position: relative; margin-top: clamp(2.5rem, 7vh, 4.5rem);
+  border-radius: clamp(0.75rem, 1.4vw, 1.25rem); overflow: hidden; background: #f2ede4;
+  box-shadow: 0 1px 0 var(--line), 0 30px 60px -40px rgba(27, 31, 34, 0.45);
+}
+.intro-film video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.if-controls { position: absolute; right: clamp(0.6rem, 1.5vw, 1.25rem); bottom: clamp(0.6rem, 1.5vw, 1.25rem); display: flex; gap: 0.45rem; }
+.if-controls button {
+  font: inherit; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.02em; cursor: pointer;
+  color: #f2f4f5; background: rgba(18, 16, 18, 0.62); border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 0.5rem 0.9rem; border-radius: 999px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.if-controls button:hover { background: rgba(18, 16, 18, 0.85); }
+.if-controls button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
+@media (max-width: 480px) { .if-controls button { padding: 0.4rem 0.75rem; font-size: 0.75rem; } }
+
 /* ===== Why choose us ===== */
 .why { max-width: 96rem; margin: 0 auto; padding: 0 clamp(1.25rem, 5vw, 5rem) clamp(5rem, 14vh, 9rem); }
 .why-head {
