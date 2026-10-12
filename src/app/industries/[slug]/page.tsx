@@ -61,7 +61,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
               <i aria-hidden="true"></i>
               <Link href="/industries">Industries</Link>
             </p>
-            <h1>{ind.name}</h1>
+            <h1 className="motion-text">{ind.name}</h1>
             <p className="ind-line">{ind.line}</p>
             <p className="page-lede">{ind.intro}</p>
             <div className="hero-ctas">
@@ -85,7 +85,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
 
         <section className="page-sec" aria-labelledby="make-title">
           <div className="sec-head">
-            <h2 id="make-title">
+            <h2 id="make-title" className="motion-text">
               What we <em>make</em>
             </h2>
           </div>
@@ -102,7 +102,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
 
         <section className="page-sec" id="gallery" aria-labelledby="gallery-title">
           <div className="sec-head">
-            <h2 id="gallery-title">
+            <h2 id="gallery-title" className="motion-text">
               Selected <em>work</em>
             </h2>
           </div>
@@ -126,7 +126,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
 
         <section className="page-sec" aria-labelledby="svc-title">
           <div className="sec-head">
-            <h2 id="svc-title">
+            <h2 id="svc-title" className="motion-text">
               How we <em>help</em>
             </h2>
           </div>
@@ -144,7 +144,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
         </section>
 
         <section className="cta-band">
-          <h2>
+          <h2 className="motion-text">
             Got a brief in <em>{ind.name}?</em>
           </h2>
           <Link className="intro-cta" href={brief}>
@@ -154,7 +154,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
 
         <section className="page-sec" aria-labelledby="more-title">
           <div className="sec-head">
-            <h2 id="more-title">
+            <h2 id="more-title" className="motion-text">
               Other <em>industries</em>
             </h2>
             <Link className="more-link" href="/industries">

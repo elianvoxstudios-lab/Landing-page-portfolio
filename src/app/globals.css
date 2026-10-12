@@ -860,3 +860,8 @@ dialog.lb::backdrop { background: transparent; }
   padding: 0.85rem clamp(1.25rem, 5vw, 5rem); font-size: 0.9375rem;
 }
 .wf-bar button { background: var(--accent); border-color: var(--accent); }
+
+/* Scroll-velocity motion blur (src/lib/useVelocityBlur.ts). Lines are untouched at rest; the
+   shared vertical blur and layer hints only apply while the page is moving. */
+.motion-line { display: block; transform-origin: 50% 50%; }
+.motion-blur-on .motion-line { filter: url(#motion-blur); will-change: transform, filter; }

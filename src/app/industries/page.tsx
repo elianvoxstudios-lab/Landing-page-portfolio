@@ -30,7 +30,7 @@ export default function IndustriesHub() {
           <p className="kicker">
             <i aria-hidden="true"></i>Industries
           </p>
-          <h1>
+          <h1 className="motion-text">
             Creative built for <em>different</em> worlds
           </h1>
           <p className="page-lede">
@@ -42,7 +42,7 @@ export default function IndustriesHub() {
           <IndustryTiles />
         </section>
         <section className="cta-band">
-          <h2>
+          <h2 className="motion-text">
             Not on the list? <em>Tell us</em> about your world.
           </h2>
           <Link className="intro-cta" href="/#contact">

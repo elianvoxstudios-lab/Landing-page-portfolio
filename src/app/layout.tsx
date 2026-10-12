@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Archivo, Fraunces } from "next/font/google";
 import localFont from "next/font/local";
+import "lenis/dist/lenis.css";
 import "./globals.css";
+import VelocityBlur from "@/components/VelocityBlur";
 import { DEFAULT_OG, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const archivo = Archivo({
@@ -54,7 +56,10 @@ export const viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${archivo.variable} ${fraunces.variable} ${matcha.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <VelocityBlur />
+      </body>
     </html>
   );
 }

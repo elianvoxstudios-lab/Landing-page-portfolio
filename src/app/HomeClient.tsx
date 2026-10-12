@@ -769,7 +769,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
           <div className="hero-copy" id="heroCopy">
             <h1>
               <span className="h1-brand">Elian Vox</span>
-              <span className="h1-line">
+              <span className="h1-line motion-text">
                 AI-Powered <em>Creative</em> &amp; Social Media <em>Studio</em>
               </span>
             </h1>
@@ -813,7 +813,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
             <p className="kicker">
               <i aria-hidden="true"></i>AI creative studio
             </p>
-            <h2 id="about-title">
+            <h2 id="about-title" className="motion-text">
               Redefining <em>creativity</em> with AI
             </h2>
           </div>
@@ -832,7 +832,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
           </svg>
         </div>
         <IntroFilm src="/video/brand-intro.mp4" poster="/video/brand-intro-poster.jpg" label="Elian Vox brand intro" />
-        <p className="lead" id="statement">
+        <p className="lead motion-text" id="statement">
           A studio that offers AI-powered creative solutions for brands and agencies, streamlining production
           timelines and enhancing creative flexibility.
         </p>
@@ -864,7 +864,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         <div className="why-head">
           <div>
             <p className="why-eyebrow">Why choose us</p>
-            <h2 id="why-title">
+            <h2 id="why-title" className="motion-text">
               The <em>AI</em> advantage
             </h2>
           </div>
@@ -887,7 +887,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
       <section className="reel" id="reel" aria-label="Featured work">
         <div className="reel-stage">
           <div className="reel-head">
-            <h2>Featured work</h2>
+            <h2 className="motion-text">Featured work</h2>
             <span className="reel-count" id="reelCount">
               01 / {String(featured.length).padStart(2, "0")}
             </span>
@@ -918,7 +918,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </div>
       </section>
 
-      <div className="band" aria-hidden="true">
+      <div className="band motion-text" data-motion-split="none" aria-hidden="true">
         <div className="band-row" data-dir="-1">
           <span>Campaigns</span>
           <span>Editorials</span>
@@ -942,7 +942,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
       <section className="show" id="work" aria-label="Selected work">
         <div className="show-copy">
           <p className="eyebrow">Selected work</p>
-          <h2>
+          <h2 className="motion-text">
             Every frame <em>is built</em> to <em>move</em>
           </h2>
           <p className="lede">
@@ -968,7 +968,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
             </button>
           </div>
         </div>
-        <div className="wall" id="wall" aria-label="Work, click any piece to expand"></div>
+        <div className="wall" id="wall" data-lenis-prevent-wheel aria-label="Work, click any piece to expand"></div>
         <div className="expand" id="expand" aria-hidden="true">
           <span>Expand +</span>
         </div>
@@ -976,7 +976,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
 
       <section className="services" id="services" aria-label="Services">
         <div className="services-head">
-          <h2>
+          <h2 className="motion-text">
             What we <em>make</em>
           </h2>
           <p>
@@ -1014,7 +1014,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
 
       <section className="ind-teaser" aria-labelledby="ind-teaser-title">
         <div className="ind-teaser-head">
-          <h2 id="ind-teaser-title">
+          <h2 id="ind-teaser-title" className="motion-text">
             Built for <em>your</em> industry
           </h2>
           <Link href="/industries">All industries &rarr;</Link>
@@ -1031,7 +1031,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
       </section>
 
       <section className="contact" id="contact">
-        <h2>
+        <h2 className="motion-text" data-motion-lines=".ln">
           <span className="ln">
             <span>Let&apos;s make</span>
           </span>
