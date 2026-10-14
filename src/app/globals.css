@@ -914,3 +914,13 @@ dialog.lb::backdrop { background: transparent; }
   .contact-sticker { transition: none; }
   .contact.in .contact-sticker:hover, .talk-mark { animation: none; transition: none; }
 }
+
+/* Starburst that trails the mouse (CursorMark.tsx). Positioned by transform only. */
+.cursor-mark {
+  position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none;
+  width: 2.4rem; margin: -1.2rem 0 0 -1.2rem; opacity: 0;
+  transform: translate3d(-100px, -100px, 0); transition: opacity .25s ease; will-change: transform;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.22));
+}
+.cursor-mark img { display: block; width: 100%; height: auto; user-select: none; }
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) { .cursor-mark { display: none; } }

@@ -5,6 +5,7 @@ import "lenis/dist/lenis.css";
 import "./globals.css";
 import VelocityBlur from "@/components/VelocityBlur";
 import Watermarks from "@/components/Watermarks";
+import CursorMark from "@/components/CursorMark";
 import { DEFAULT_OG, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const archivo = Archivo({
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <VelocityBlur />
         <Watermarks />
+        <CursorMark />
       </body>
     </html>
   );
