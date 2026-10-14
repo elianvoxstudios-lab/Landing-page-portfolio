@@ -26,7 +26,7 @@ const EMAIL = "elianvoxstudios@gmail.com";
 
 type Piece = {
   n: number;
-  group: "photo" | "illus" | "render" | "brand";
+  group: "photo" | "illus" | "brand";
   title: string;
   cat: string;
   file: string;
@@ -45,7 +45,6 @@ const PIECES: Piece[] = [
   { n: 20, group: "brand", title: "Bold flavor", cat: "Food campaign", file: "tile-n20-bold-flavor.jpg", w: 768, h: 1344 },
   { n: 34, group: "illus", title: "Fuzzy type", cat: "3D lettering", file: "tile-n34-fuzzy-type.webp", w: 768, h: 1344 },
   { n: 6, group: "photo", title: "Blue hour I", cat: "Portrait", file: "tile-n06-blue-hour-i.webp", w: 900, h: 1600 },
-  { n: 14, group: "render", title: "Pursuit", cat: "Anime key art", file: "tile-n14-pursuit.webp", w: 900, h: 1600 },
   { n: 35, group: "illus", title: "Burst wordmark", cat: "Lettering", file: "tile-n35-burst-wordmark.webp", w: 768, h: 1344 },
   { n: 21, group: "brand", title: "Spotlight energy", cat: "Beauty campaign", file: "tile-n21-spotlight-energy.jpg", w: 768, h: 1344 },
   { n: 8, group: "photo", title: "Serve", cat: "Conceptual", file: "tile-n08-serve.webp", w: 900, h: 1600 },
@@ -59,7 +58,6 @@ const PIECES: Piece[] = [
   { n: 12, group: "illus", title: "Old master I", cat: "Illustration", file: "tile-n12-old-master-i.webp", w: 900, h: 1600 },
   { n: 24, group: "brand", title: "Edge key", cat: "Product visual", file: "tile-n24-edge-key.jpg", w: 1344, h: 768 },
   { n: 18, group: "photo", title: "Low tide", cat: "Film still", file: "tile-n18-low-tide.webp", w: 900, h: 1600 },
-  { n: 11, group: "render", title: "Night shift", cat: "3D character", file: "tile-n11-night-shift.webp", w: 900, h: 1600 },
   { n: 26, group: "brand", title: "Gear drop", cat: "Brand illustration", file: "tile-n26-gear-drop.jpg", w: 768, h: 1344 },
   { n: 17, group: "photo", title: "Mirror room", cat: "Editorial", file: "tile-n17-mirror-room.webp", w: 900, h: 1600 },
   { n: 13, group: "illus", title: "Old master II", cat: "Illustration", file: "tile-n13-old-master-ii.webp", w: 900, h: 1600 },
@@ -75,7 +73,7 @@ const PIECES: Piece[] = [
 ];
 
 const LANES = [
-  { f: "all", label: "All work", count: "36" },
+  { f: "all", label: "All work", count: "34" },
   { f: "brand", label: "Brand campaigns", count: "13" },
   { f: "photo", label: "Photographic campaigns", count: "11" },
   { f: "illus", label: "Illustration", count: "10" },
