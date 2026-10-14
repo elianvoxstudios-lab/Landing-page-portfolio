@@ -702,7 +702,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
 
   return (
     <>
-      <section className="scene" id="scene">
+      <section className="scene" id="scene" data-cursor="blue">
         <div className="stage">
           <div className="frame">
             <img
@@ -809,7 +809,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </div>
       </section>
 
-      <section className="statement" id="about" aria-labelledby="about-title">
+      <section className="statement" id="about" aria-labelledby="about-title" data-cursor="black">
         <div className="intro-top">
           <div>
             <p className="kicker">
@@ -862,7 +862,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         <WideFilmPlayer src={wideFilm.src} poster={wideFilm.poster} label="Elian Vox services film" />
       )}
 
-      <section className="why" id="why" aria-labelledby="why-title">
+      <section className="why" id="why" aria-labelledby="why-title" data-cursor="orange">
         <div className="why-head">
           <div>
             <p className="why-eyebrow">Why choose us</p>
@@ -886,7 +886,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </ol>
       </section>
 
-      <section className="reel" id="reel" aria-label="Featured work">
+      <section className="reel" id="reel" aria-label="Featured work" data-cursor="pink">
         <div className="reel-stage" data-watermark>
           <div className="reel-head">
             <h2 className="motion-text">Featured work</h2>
@@ -920,7 +920,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </div>
       </section>
 
-      <div className="band motion-text" data-motion-split="none" aria-hidden="true">
+      <div className="band motion-text" data-motion-split="none" data-cursor="blue" aria-hidden="true">
         <div className="band-row" data-dir="-1">
           <span>Campaigns</span>
           <span>Editorials</span>
@@ -941,7 +941,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </div>
       </div>
 
-      <section className="show" id="work" aria-label="Selected work" data-watermark>
+      <section className="show" id="work" aria-label="Selected work" data-watermark data-cursor="lime">
         <div className="show-copy">
           <p className="eyebrow">Selected work</p>
           <h2 className="motion-text">
@@ -976,7 +976,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </div>
       </section>
 
-      <section className="services" id="services" aria-label="Services">
+      <section className="services" id="services" aria-label="Services" data-cursor="black">
         <div className="services-head">
           <h2 className="motion-text">
             What we <em>make</em>
@@ -1014,7 +1014,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </div>
       </section>
 
-      <section className="space-band" aria-labelledby="space-title">
+      <section className="space-band" aria-labelledby="space-title" data-cursor="orange">
         {/* eslint-disable-next-line @next/next/no-img-element -- matches the rest of the page's plain <img> usage */}
         <img
           className="space-img"
@@ -1036,7 +1036,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </div>
       </section>
 
-      <section className="contact" id="contact">
+      <section className="contact" id="contact" data-cursor="blue">
         <h2 className="motion-text" data-motion-lines=".ln">
           <span className="ln">
             <span>Let&apos;s make</span>

@@ -912,6 +912,17 @@ dialog.lb::backdrop { background: transparent; }
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.22));
 }
 .cursor-mark img { display: block; width: 100%; height: auto; user-select: none; }
+/* Tinted starburst over the white base; same geometry as mark-sticker.png (mark inset 70px on a 1278x1380 canvas) */
+.cursor-mark-tint {
+  position: absolute; left: 5.477%; top: 5.072%; width: 89.05%; height: 89.86%;
+  background: var(--cm, #2458f0); transition: background-color .45s ease;
+  -webkit-mask: url(/brand/mark-mask.png) center / 100% 100% no-repeat; mask: url(/brand/mark-mask.png) center / 100% 100% no-repeat;
+}
+.cursor-mark[data-tone="blue"] { --cm: #2458f0; }
+.cursor-mark[data-tone="black"] { --cm: #14171a; }
+.cursor-mark[data-tone="lime"] { --cm: #d4f500; }
+.cursor-mark[data-tone="orange"] { --cm: #ff6b2c; }
+.cursor-mark[data-tone="pink"] { --cm: #ff5fb0; }
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) { .cursor-mark { display: none; } }
 
 /* Full-width image banner above the contact section; copy sits in the dark space beside the

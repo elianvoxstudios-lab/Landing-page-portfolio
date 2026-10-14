@@ -143,7 +143,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
           </ul>
         </section>
 
-        <section className="cta-band" data-watermark>
+        <section className="cta-band" data-watermark data-cursor="lime">
           <h2 className="motion-text">
             Got a brief in <em>{ind.name}?</em>
           </h2>

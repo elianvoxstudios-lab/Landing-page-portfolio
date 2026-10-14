@@ -92,7 +92,7 @@ export default function WideFilm({ src, poster, label }: { src: string; poster?:
   };
 
   return (
-    <section ref={section} className="wide-film" data-mode={mode ?? undefined} data-min={min || undefined} aria-label={label}>
+    <section ref={section} className="wide-film" data-cursor="lime" data-mode={mode ?? undefined} data-min={min || undefined} aria-label={label}>
       <div className="wf-stage" hidden={min}>
         <video ref={video} src={src} poster={poster} muted loop playsInline preload="metadata" aria-label={label} />
         <div className="wf-controls">

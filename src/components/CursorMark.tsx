@@ -7,11 +7,29 @@ import { useEffect, useRef } from "react";
  * stays). It springs after the pointer, tilts with horizontal speed, grows and spins over
  * links and buttons, squishes on click, and steps aside where something else owns the cursor
  * (the work wall's "Expand +" bubble, form fields). Mouse/trackpad only; off for reduced motion.
+ *
+ * Its colour follows the area under the pointer: the nearest `data-cursor="<tone>"` ancestor,
+ * else blue on light backgrounds and lime on dark ones. Tones are defined in globals.css.
  */
 const OFFSET = 18; // px below-right of the pointer tip
 const FOLLOW = 0.2; // per 60fps frame
 const INTERACTIVE = "a, button, [role='button'], label, select, summary";
 const HIDE_OVER = ".wall, input, textarea, [contenteditable='true'], dialog[open]";
+
+/** Tone for the area under the pointer. */
+function toneAt(t: Element | null): string {
+  const zone = t?.closest?.<HTMLElement>("[data-cursor]");
+  if (zone?.dataset.cursor) return zone.dataset.cursor;
+  // Fallback: first ancestor with a solid background decides light vs dark
+  for (let e: Element | null = t; e; e = e.parentElement) {
+    const m = getComputedStyle(e).backgroundColor.match(/[\d.]+/g);
+    if (m && (m[3] === undefined || +m[3] > 0.5)) {
+      const [r, g, b] = m.map(Number);
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b < 128 ? "lime" : "blue";
+    }
+  }
+  return "blue";
+}
 
 export default function CursorMark() {
   const ref = useRef<HTMLDivElement>(null);
@@ -25,7 +43,7 @@ export default function CursorMark() {
 
     let tx = -100, ty = -100, x = -100, y = -100, vx = 0;
     let tilt = 0, scale = 1, targetScale = 1, spin = 0, targetSpin = 0, offset = OFFSET;
-    let visible = false, hidden = false, down = false, hot = false;
+    let visible = false, hidden = false, down = false, hot = false, pop = 0;
     let raf = 0, last = 0;
 
     const setOpacity = () => (el.style.opacity = visible && !hidden ? "1" : "0");
@@ -44,14 +62,16 @@ export default function CursorMark() {
       y += (ty - y) * k;
       vx = (x - px) / Math.max(f, 0.001);
       tilt += (Math.max(-28, Math.min(28, vx * 1.6)) - tilt) * k;
-      targetScale = down ? 0.82 : hot ? 1.4 : 1;
+      pop *= Math.pow(1 - 0.12, f); // brief swell when the colour changes
+      if (pop < 0.002) pop = 0;
+      targetScale = (down ? 0.82 : hot ? 1.4 : 1) + pop;
       scale += (targetScale - scale) * (1 - Math.pow(1 - 0.25, f));
       spin += (targetSpin - spin) * (1 - Math.pow(1 - 0.12, f));
       // grows away from the pointer so the larger mark sits beside a label rather than on it
       const off = OFFSET * Math.max(1, scale) * (hot ? 1.5 : 1);
       offset += (off - offset) * k;
       el.style.transform = `translate3d(${(x + offset).toFixed(1)}px, ${(y + offset).toFixed(1)}px, 0) rotate(${(tilt + spin).toFixed(2)}deg) scale(${scale.toFixed(3)})`;
-      const settled = Math.abs(tx - x) < 0.1 && Math.abs(ty - y) < 0.1 && Math.abs(tilt) < 0.05 && Math.abs(targetScale - scale) < 0.002 && Math.abs(targetSpin - spin) < 0.05 && Math.abs(off - offset) < 0.1;
+      const settled = Math.abs(tx - x) < 0.1 && Math.abs(ty - y) < 0.1 && Math.abs(tilt) < 0.05 && Math.abs(targetScale - scale) < 0.002 && Math.abs(targetSpin - spin) < 0.05 && Math.abs(off - offset) < 0.1 && pop === 0;
       raf = settled ? 0 : requestAnimationFrame(step);
     };
 
@@ -65,12 +85,33 @@ export default function CursorMark() {
         visible = true;
       }
       const t = e.target as Element | null;
+      setTone(toneAt(t));
       hidden = !!t?.closest?.(HIDE_OVER);
       const nowHot = !!t?.closest?.(INTERACTIVE);
       if (nowHot && !hot) targetSpin += 90; // a quarter turn each time it lands on something clickable
       hot = nowHot;
       setOpacity();
       kick();
+    };
+    let tone = "";
+    const setTone = (next: string) => {
+      if (next === tone) return;
+      if (tone) pop = 0.3;
+      tone = next;
+      el.dataset.tone = next;
+      kick();
+    };
+    // The page can scroll under a still mouse: re-check what's under the pointer
+    let scrollRaf = 0;
+    const onScroll = () => {
+      if (!visible || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(() => {
+        scrollRaf = 0;
+        const t = document.elementFromPoint(tx, ty);
+        setTone(toneAt(t));
+        hidden = !!t?.closest?.(HIDE_OVER);
+        setOpacity();
+      });
     };
     const onDown = () => { down = true; kick(); };
     const onUp = () => { down = false; kick(); };
@@ -80,7 +121,10 @@ export default function CursorMark() {
     window.addEventListener("pointerdown", onDown, { passive: true });
     window.addEventListener("pointerup", onUp, { passive: true });
     document.documentElement.addEventListener("mouseleave", onLeave);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(scrollRaf);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
@@ -91,8 +135,10 @@ export default function CursorMark() {
 
   return (
     <div ref={ref} className="cursor-mark" aria-hidden="true">
+      {/* White die-cut base, with the starburst as a tintable layer on top (colour set by data-tone) */}
       {/* eslint-disable-next-line @next/next/no-img-element -- tiny decorative sprite */}
-      <img src="/brand/mark-sticker.png" alt="" width={389} height={420} draggable={false} />
+      <img src="/brand/mark-sticker-base.png" alt="" width={389} height={420} draggable={false} />
+      <span className="cursor-mark-tint" />
     </div>
   );
 }

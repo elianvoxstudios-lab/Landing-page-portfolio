@@ -41,7 +41,7 @@ export default function IndustriesHub() {
         <section className="page-sec" aria-label="Industries">
           <IndustryTiles />
         </section>
-        <section className="cta-band" data-watermark>
+        <section className="cta-band" data-watermark data-cursor="lime">
           <h2 className="motion-text">
             Not on the list? <em>Tell us</em> about your world.
           </h2>

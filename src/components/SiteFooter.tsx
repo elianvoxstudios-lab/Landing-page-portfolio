@@ -3,7 +3,7 @@ import { INDUSTRIES } from "@/data/industries";
 
 export default function SiteFooter() {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" data-cursor="black">
       <nav aria-label="Industries">
         <Link href="/industries">Industries</Link>
         {INDUSTRIES.map((i) => (
