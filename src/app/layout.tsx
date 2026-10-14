@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import VelocityBlur from "@/components/VelocityBlur";
+import Watermarks from "@/components/Watermarks";
 import { DEFAULT_OG, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const archivo = Archivo({
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         {children}
         <VelocityBlur />
+        <Watermarks />
       </body>
     </html>
   );

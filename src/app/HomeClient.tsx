@@ -828,7 +828,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
                 </textPath>
               </text>
             </g>
-            <path className="badge-arrow" d="M60 44V76M48 64L60 76L72 64" />
+            <image className="badge-mark" href="/brand/mark-blue.png" x="42" y="40.4" width="36" height="39.2" />
           </svg>
         </div>
         <IntroFilm src="/video/brand-intro.mp4" poster="/video/brand-intro-poster.jpg" label="Elian Vox brand intro" />
@@ -885,7 +885,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
       </section>
 
       <section className="reel" id="reel" aria-label="Featured work">
-        <div className="reel-stage">
+        <div className="reel-stage" data-watermark>
           <div className="reel-head">
             <h2 className="motion-text">Featured work</h2>
             <span className="reel-count" id="reelCount">
@@ -939,7 +939,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </div>
       </div>
 
-      <section className="show" id="work" aria-label="Selected work">
+      <section className="show" id="work" aria-label="Selected work" data-watermark>
         <div className="show-copy">
           <p className="eyebrow">Selected work</p>
           <h2 className="motion-text">
@@ -1038,6 +1038,8 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
           <span className="ln">
             <span>something move.</span>
           </span>
+          {/* eslint-disable-next-line @next/next/no-img-element -- decorative sticker, same plain <img> as the rest of the page */}
+          <img className="contact-sticker" src="/brand/mark-sticker.png" alt="" aria-hidden="true" width={389} height={420} />
         </h2>
         <div className="contact-grid">
           <form className="form" id="form" noValidate>
@@ -1129,6 +1131,8 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
       </section>
       <SiteFooter />
       <a className="talk" id="talk" href="#contact">
+        {/* eslint-disable-next-line @next/next/no-img-element -- decorative */}
+        <img className="talk-mark" src="/brand/mark-blue.png" alt="" aria-hidden="true" width={294} height={320} />
         Let&apos;s talk
       </a>
 

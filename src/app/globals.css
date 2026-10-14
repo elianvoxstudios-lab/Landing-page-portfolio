@@ -122,8 +122,15 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--steel); outline
   display: inline-flex; align-items: center; gap: 0.6rem; margin: 0 0 1.4rem;
   font-size: 0.8125rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--page-muted);
 }
-.kicker i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: kick 2s ease-in-out infinite; }
-@keyframes kick { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 22%, transparent); } }
+/* Section markers: the starburst mark, tinted by CSS (mask), with a small nod */
+.kicker i, .why-eyebrow::before, .show .eyebrow::before {
+  flex: none; display: inline-block; width: 1.6em; height: 1.6em; background: var(--accent);
+  -webkit-mask: url(/brand/mark-mask.png) center / contain no-repeat; mask: url(/brand/mark-mask.png) center / contain no-repeat;
+  transform-origin: 50% 60%; animation: mark-nod 3.6s ease-in-out infinite;
+}
+.why-eyebrow::before, .show .eyebrow::before { content: ""; vertical-align: -0.5em; margin-right: 0.6rem; }
+.show .eyebrow::before { background: #e6ff2e; }
+@keyframes mark-nod { 0%, 70%, 100% { transform: rotate(0); } 78% { transform: rotate(-12deg) scale(1.08); } 88% { transform: rotate(9deg); } }
 .statement h2 {
   margin: 0; font-stretch: 125%; font-weight: 800;
   font-size: clamp(2.5rem, 6.4vw, 6rem); line-height: 0.92; letter-spacing: -0.035em; max-width: 12ch;
@@ -135,7 +142,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--steel); outline
 .badge { flex: none; width: clamp(6.5rem, 11vw, 9.5rem); height: auto; color: var(--page-fg); }
 .badge text { fill: currentColor; font-weight: 600; }
 .badge-ring { transform-origin: 60px 60px; animation: spin 22s linear infinite; }
-.badge-arrow { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
 @keyframes spin { to { transform: rotate(360deg); } }
 .statement .lead {
   margin: clamp(3rem, 9vh, 5.5rem) 0 0; max-width: 24ch;
@@ -164,7 +171,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--steel); outline
   .badge { width: 5.5rem; }
   .intro-cols { grid-template-columns: 1fr; }
 }
-@media (prefers-reduced-motion: reduce) { .badge-ring, .kicker i { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .badge-ring, .kicker i, .why-eyebrow::before, .show .eyebrow::before { animation: none; } }
 
 /* Brand intro film under "Redefining creativity with AI" */
 .intro-film {
@@ -865,3 +872,45 @@ dialog.lb::backdrop { background: transparent; }
    shared vertical blur and layer hints only apply while the page is moving. */
 .motion-line { display: block; transform-origin: 50% 50%; }
 .motion-blur-on .motion-line { filter: url(#motion-blur); will-change: transform, filter; }
+
+/* Big faint watermark of the mark behind dark sections; rotation follows scroll (Watermarks.tsx) */
+@property --wm-rot { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+[data-watermark] { position: relative; isolation: isolate; overflow: hidden; }
+[data-watermark]::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: var(--wm-x, 80%); top: var(--wm-y, 50%); width: var(--wm-size, min(70vmax, 56rem)); aspect-ratio: 587 / 640;
+  background: var(--wm-color, #e6ff2e); opacity: var(--wm-opacity, 0.07);
+  -webkit-mask: url(/brand/mark-mask.png) center / contain no-repeat; mask: url(/brand/mark-mask.png) center / contain no-repeat;
+  transform: translate(-50%, -50%) rotate(var(--wm-rot));
+}
+.show[data-watermark] { --wm-x: 18%; --wm-y: 82%; --wm-size: min(78vmax, 60rem); }
+.reel-stage[data-watermark] { --wm-x: 88%; --wm-y: 22%; --wm-size: min(60vmax, 46rem); }
+.cta-band[data-watermark] { --wm-x: 92%; --wm-y: 50%; --wm-size: 24rem; --wm-opacity: 0.1; }
+
+/* Sticker on "Let's make something move.": anchored to the headline's top-right, above the end of
+   "move." (the first line is shorter, so that corner is empty). Sized in em so it scales with the type. */
+.contact { position: relative; }
+.contact h2 { position: relative; width: fit-content; }
+.contact-sticker {
+  --st-y: -38%;
+  position: absolute; z-index: 1; right: 0; top: 0; width: 1.25em; height: auto;
+  filter: drop-shadow(0 0.12em 0.18em rgba(0, 0, 0, 0.18));
+  transform: translateY(var(--st-y)) rotate(-12deg) scale(0); transition: transform .8s cubic-bezier(.34, 1.56, .64, 1) .45s;
+}
+.contact.in .contact-sticker { transform: translateY(var(--st-y)) rotate(-12deg) scale(1); }
+.contact.in .contact-sticker:hover { animation: sticker-wobble .7s ease-in-out; }
+@keyframes sticker-wobble {
+  0%, 100% { transform: translateY(var(--st-y)) rotate(-12deg) scale(1); } 25% { transform: translateY(var(--st-y)) rotate(-1deg) scale(1.07); }
+  50% { transform: translateY(var(--st-y)) rotate(-20deg) scale(1.03); } 75% { transform: translateY(var(--st-y)) rotate(-8deg) scale(1.05); }
+}
+/* Phones: the first line is the widest, so the sticker sits just above the headline instead */
+@media (max-width: 720px) { .contact-sticker { --st-y: -112%; width: 1.5em; } }
+
+/* Mark on the floating "Let's talk" button */
+.talk { display: inline-flex; align-items: center; gap: 0.5rem; }
+.talk-mark { width: 1.35rem; height: auto; transition: transform .4s cubic-bezier(.34, 1.56, .64, 1); }
+.talk:hover .talk-mark { transform: rotate(-14deg) scale(1.15); }
+@media (prefers-reduced-motion: reduce) {
+  .contact-sticker { transition: none; }
+  .contact.in .contact-sticker:hover, .talk-mark { animation: none; transition: none; }
+}
