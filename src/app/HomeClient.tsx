@@ -37,14 +37,19 @@ type Piece = {
 // Document order matters: it drives the CSS-columns masonry fill order.
 const PIECES: Piece[] = [
   { n: 1, group: "photo", title: "Section 13", cat: "Editorial", file: "tile-n01-section-13.webp", w: 900, h: 1200 },
+  { n: 32, group: "illus", title: "Creative hand", cat: "3D illustration", file: "tile-n32-creative-hand.webp", w: 768, h: 1344 },
   { n: 19, group: "brand", title: "Morado cream", cat: "Brand identity", file: "tile-n19-morado-cream.jpg", w: 768, h: 1344 },
   { n: 3, group: "photo", title: "Crater I", cat: "Campaign", file: "tile-n03-crater-i.webp", w: 900, h: 1600 },
+  { n: 33, group: "illus", title: "Can I help you?", cat: "Illustration", file: "tile-n33-can-i-help-you.webp", w: 768, h: 1344 },
   { n: 9, group: "illus", title: "Open book", cat: "Illustration", file: "tile-n09-open-book.webp", w: 900, h: 1600 },
   { n: 20, group: "brand", title: "Bold flavor", cat: "Food campaign", file: "tile-n20-bold-flavor.jpg", w: 768, h: 1344 },
+  { n: 34, group: "illus", title: "Fuzzy type", cat: "3D lettering", file: "tile-n34-fuzzy-type.webp", w: 768, h: 1344 },
   { n: 6, group: "photo", title: "Blue hour I", cat: "Portrait", file: "tile-n06-blue-hour-i.webp", w: 900, h: 1600 },
   { n: 14, group: "render", title: "Pursuit", cat: "Anime key art", file: "tile-n14-pursuit.webp", w: 900, h: 1600 },
+  { n: 35, group: "illus", title: "Burst wordmark", cat: "Lettering", file: "tile-n35-burst-wordmark.webp", w: 768, h: 1344 },
   { n: 21, group: "brand", title: "Spotlight energy", cat: "Beauty campaign", file: "tile-n21-spotlight-energy.jpg", w: 768, h: 1344 },
   { n: 8, group: "photo", title: "Serve", cat: "Conceptual", file: "tile-n08-serve.webp", w: 900, h: 1600 },
+  { n: 36, group: "illus", title: "Glitch tiger", cat: "Poster illustration", file: "tile-n36-glitch-tiger.webp", w: 768, h: 1344 },
   { n: 16, group: "photo", title: "Red line", cat: "Editorial", file: "tile-n16-red-line.webp", w: 900, h: 1600 },
   { n: 22, group: "brand", title: "Street poster", cat: "Out of home", file: "tile-n22-street-poster.jpg", w: 768, h: 1344 },
   { n: 10, group: "illus", title: "Window", cat: "Illustration", file: "tile-n10-window.webp", w: 900, h: 1600 },
@@ -70,10 +75,10 @@ const PIECES: Piece[] = [
 ];
 
 const LANES = [
-  { f: "all", label: "All work", count: "31" },
+  { f: "all", label: "All work", count: "36" },
   { f: "brand", label: "Brand campaigns", count: "13" },
   { f: "photo", label: "Photographic campaigns", count: "11" },
-  { f: "illus", label: "Illustration", count: "05" },
+  { f: "illus", label: "Illustration", count: "10" },
   { f: "render", label: "3D and anime", count: "02" },
 ];
 
