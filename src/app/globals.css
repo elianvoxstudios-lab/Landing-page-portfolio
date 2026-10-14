@@ -924,3 +924,36 @@ dialog.lb::backdrop { background: transparent; }
 }
 .cursor-mark img { display: block; width: 100%; height: auto; user-select: none; }
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) { .cursor-mark { display: none; } }
+
+/* Full-width image banner above the contact section; copy sits in the dark space beside the
+   astronaut (left on landscape screens, above him on portrait ones) */
+.space-band { position: relative; isolation: isolate; overflow: hidden; min-height: min(92svh, 56rem); display: flex; align-items: center; background: #05080f; color: #f2f4f5; }
+.space-img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 30% 50%; }
+.space-band::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(5, 8, 15, 0.82) 0%, rgba(5, 8, 15, 0.5) 32%, rgba(5, 8, 15, 0) 58%);
+}
+/* Not centred in the 96rem column like other sections: on very wide screens that would push the
+   copy into the astronaut, so it stays at the left gutter */
+.space-copy { width: 100%; padding: clamp(4rem, 10vh, 7rem) clamp(1.25rem, 5vw, 5rem); }
+.space-copy h2 {
+  margin: 0; max-width: 9ch; font-family: var(--font-display); font-weight: 400; font-synthesis: none; letter-spacing: 0.01em;
+  font-size: clamp(2.4rem, 5vw, 5.5rem); line-height: 0.98;
+}
+.space-copy h2 em {
+  font-family: var(--font-fraunces), "Fraunces", Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -0.02em; color: #e6ff2e;
+}
+.space-copy p { margin: 1.25rem 0 2rem; max-width: 30ch; font-size: clamp(1.0625rem, 1.4vw, 1.25rem); line-height: 1.5; color: rgba(242, 244, 245, 0.82); }
+/* Portrait screens: a tall crop would put the astronaut under the text, so stack instead:
+   copy on the space colour first, then the whole astronaut below, fading in from the top */
+@media (max-aspect-ratio: 1/1) {
+  .space-band { display: flex; flex-direction: column; align-items: stretch; min-height: 0; }
+  .space-band::before { display: none; }
+  .space-copy { order: -1; padding-bottom: 0.5rem; }
+  .space-copy h2 { max-width: 10ch; }
+  .space-img {
+    position: relative; inset: auto; z-index: 0; height: min(64svh, 32rem); object-position: 52% 45%;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 24%); mask-image: linear-gradient(to bottom, transparent 0, #000 24%);
+  }
+}
+

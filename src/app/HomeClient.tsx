@@ -1035,6 +1035,28 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </ul>
       </section>
 
+      <section className="space-band" aria-labelledby="space-title">
+        {/* eslint-disable-next-line @next/next/no-img-element -- matches the rest of the page's plain <img> usage */}
+        <img
+          className="space-img"
+          src="/images/space-band.webp"
+          alt="An astronaut drifting through space beside a rainbow light streak, above the glow of the Earth"
+          width={1344}
+          height={768}
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="space-copy">
+          <h2 id="space-title" className="motion-text">
+            Ideas that <em>defy</em> gravity.
+          </h2>
+          <p>Bold concepts, launched with AI and landed by hand.</p>
+          <a className="intro-cta" href="#contact">
+            Start a project <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </section>
+
       <section className="contact" id="contact">
         <h2 className="motion-text" data-motion-lines=".ln">
           <span className="ln">
