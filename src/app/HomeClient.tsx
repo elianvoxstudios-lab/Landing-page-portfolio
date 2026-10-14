@@ -79,7 +79,6 @@ const LANES = [
   { f: "brand", label: "Brand campaigns", count: "13" },
   { f: "photo", label: "Photographic campaigns", count: "11" },
   { f: "illus", label: "Illustration", count: "10" },
-  { f: "render", label: "3D and anime", count: "02" },
 ];
 
 const WHY = [
@@ -1015,24 +1014,6 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
           <p>Not sure which fits? Tell us what it is for and we will shape the brief with you.</p>
           <a href="#contact">Start a project</a>
         </div>
-      </section>
-
-      <section className="ind-teaser" aria-labelledby="ind-teaser-title">
-        <div className="ind-teaser-head">
-          <h2 id="ind-teaser-title" className="motion-text">
-            Built for <em>your</em> industry
-          </h2>
-          <Link href="/industries">All industries &rarr;</Link>
-        </div>
-        <ul>
-          {INDUSTRIES.map((ind) => (
-            <li key={ind.slug}>
-              <Link href={`/industries/${ind.slug}`} title={ind.line}>
-                {ind.name} <span aria-hidden="true">&rarr;</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
       </section>
 
       <section className="space-band" aria-labelledby="space-title">

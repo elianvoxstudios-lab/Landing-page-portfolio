@@ -657,28 +657,17 @@ dialog.lb::backdrop { background: transparent; }
 .enquire span { transition: transform .3s cubic-bezier(.16,1,.3,1); }
 .enquire:hover span { transform: translateX(4px); }
 
-/* Homepage industries strip */
-.ind-teaser { max-width: 96rem; margin: 0 auto; padding: clamp(3rem, 8vh, 5rem) clamp(1.25rem, 5vw, 5rem) 0; }
-.ind-teaser-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; }
-.ind-teaser h2, .sec-head h2 {
+/* Section headings (industry pages) */
+.sec-head h2 {
   margin: 0; font-stretch: 125%; font-weight: 800; letter-spacing: -0.03em; line-height: 0.95;
   font-size: clamp(1.9rem, 4vw, 3.5rem);
 }
-.ind-teaser h2 em, .sec-head h2 em, .page-head h1 em, .cta-band h2 em {
+.sec-head h2 em, .page-head h1 em, .cta-band h2 em {
   font-family: var(--font-fraunces), "Fraunces", Georgia, serif; font-style: italic; font-weight: 400;
   font-stretch: normal; letter-spacing: -0.02em; color: var(--accent);
 }
-.ind-teaser-head a, .more-link { color: var(--page-muted); text-decoration: none; font-weight: 500; }
-.ind-teaser-head a:hover, .more-link:hover { color: var(--page-fg); }
-.ind-teaser ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.ind-teaser li a {
-  display: inline-flex; gap: 0.5rem; padding: 0.75rem 1.15rem; border: 1px solid var(--line); border-radius: 999px;
-  color: var(--page-fg); text-decoration: none; font-size: 1rem; background: var(--chip);
-  transition: background .2s, color .2s, border-color .2s;
-}
-.ind-teaser li a span { color: var(--accent); transition: transform .3s cubic-bezier(.16,1,.3,1); }
-.ind-teaser li a:hover { background: var(--page-fg); color: var(--page-bg); border-color: var(--page-fg); }
-.ind-teaser li a:hover span { transform: translateX(3px); }
+.more-link { color: var(--page-muted); text-decoration: none; font-weight: 500; }
+.more-link:hover { color: var(--page-fg); }
 
 .form select {
   font: inherit; font-size: 1.0625rem; color: var(--page-fg); background: transparent;
@@ -803,7 +792,7 @@ dialog.lb::backdrop { background: transparent; }
 .statement h2, .why-head h2, .services-head h2,
 .why-grid h3, .svc h3, .reel-head h2,
 .band-row, .show h2, .contact h2,
-.ind-teaser h2, .sec-head h2, .page-head h1, .ind-hero h1, .cta-band h2 {
+.sec-head h2, .page-head h1, .ind-hero h1, .cta-band h2 {
   font-family: var(--font-display);
   font-weight: 400;
   font-stretch: normal;
@@ -818,7 +807,7 @@ dialog.lb::backdrop { background: transparent; }
 .band-row { font-size: clamp(2.75rem, 8.3vw, 8rem); line-height: 1; }
 .show h2 { font-size: clamp(2.4rem, 5vw, 5.25rem); line-height: 1; }
 .contact h2 { font-size: clamp(2.5rem, 7.7vw, 7.5rem); line-height: 0.95; }
-.ind-teaser h2, .sec-head h2 { line-height: 1; }
+.sec-head h2 { line-height: 1; }
 .page-head h1, .ind-hero h1 { font-size: clamp(2.4rem, 6.4vw, 6rem); line-height: 0.98; }
 .cta-band h2 { line-height: 1.02; }
 
