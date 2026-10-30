@@ -47,6 +47,7 @@ const PIECES: Piece[] = [
   { n: 3, group: "photo", title: "Crater I", cat: "Campaign", file: "tile-n03-crater-i.webp", w: 900, h: 1600 },
   { n: 33, group: "illus", title: "Can I help you?", cat: "Illustration", file: "tile-n33-can-i-help-you.webp", w: 768, h: 1344 },
   { n: 9, group: "illus", title: "Open book", cat: "Illustration", file: "tile-n09-open-book.webp", w: 900, h: 1600 },
+  { n: 39, group: "video", title: "Brand mosaic", cat: "Brand reel", file: "tile-n39-brand-mosaic.jpg", w: 540, h: 960, video: "/video/brand-mosaic-tile.mp4", full: "/video/brand-mosaic.mp4" },
   { n: 20, group: "brand", title: "Bold flavor", cat: "Food campaign", file: "tile-n20-bold-flavor.jpg", w: 768, h: 1344 },
   { n: 34, group: "illus", title: "Fuzzy type", cat: "3D lettering", file: "tile-n34-fuzzy-type.webp", w: 768, h: 1344 },
   { n: 6, group: "photo", title: "Blue hour I", cat: "Portrait", file: "tile-n06-blue-hour-i.webp", w: 900, h: 1600 },
@@ -78,11 +79,11 @@ const PIECES: Piece[] = [
 ];
 
 const LANES = [
-  { f: "all", label: "All work", count: "36" },
+  { f: "all", label: "All work", count: "37" },
   { f: "brand", label: "Brand campaigns", count: "13" },
   { f: "photo", label: "Photographic campaigns", count: "11" },
   { f: "illus", label: "Illustration", count: "10" },
-  { f: "video", label: "Videos", count: "02" },
+  { f: "video", label: "Videos", count: "03" },
 ];
 
 const WHY = [
