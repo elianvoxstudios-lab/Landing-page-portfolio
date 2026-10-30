@@ -323,10 +323,10 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--steel); outline
   position: relative; display: block; width: 100%; padding: 0; border: 0; background: #1c2427;
   border-radius: 10px; overflow: hidden; cursor: pointer;
 }
-.tile2 img { display: block; width: 100%; height: auto; transition: transform .8s cubic-bezier(.16,1,.3,1), filter .4s; }
+.tile2 img, .tile2 video { display: block; width: 100%; height: auto; transition: transform .8s cubic-bezier(.16,1,.3,1), filter .4s; }
 .tile2:hover img { transform: scale(1.04); }
-.wall:hover .tile2 img { filter: brightness(.72); }
-.wall:hover .tile2:hover img { filter: none; }
+.wall:hover .tile2 img, .wall:hover .tile2 video { filter: brightness(.72); }
+.wall:hover .tile2:hover img, .wall:hover .tile2:hover video { filter: none; }
 .tile2 .cap {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 2.2rem 0.8rem 0.7rem;
   display: flex; justify-content: space-between; gap: .5rem; font-size: 0.8125rem; color: #fff; text-align: left;

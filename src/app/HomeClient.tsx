@@ -26,19 +26,24 @@ const EMAIL = "elianvoxstudios@gmail.com";
 
 type Piece = {
   n: number;
-  group: "photo" | "illus" | "brand";
+  group: "photo" | "illus" | "brand" | "video";
   title: string;
   cat: string;
   file: string;
   w: number;
   h: number;
+  /** Video piece: `file` is its poster (a /path, or a name in /images); `video` plays in the wall tile, `full` in the viewer. */
+  video?: string;
+  full?: string;
 };
 
 // Document order matters: it drives the CSS-columns masonry fill order.
 const PIECES: Piece[] = [
+  { n: 37, group: "video", title: "Every frame is built to move", cat: "Social reel", file: "tile-n37-every-frame-reel.jpg", w: 540, h: 960, video: "/video/every-frame-reel-tile.mp4", full: "/video/every-frame-reel.mp4" },
   { n: 1, group: "photo", title: "Section 13", cat: "Editorial", file: "tile-n01-section-13.webp", w: 900, h: 1200 },
   { n: 32, group: "illus", title: "Creative hand", cat: "3D illustration", file: "tile-n32-creative-hand.webp", w: 768, h: 1344 },
   { n: 19, group: "brand", title: "Morado cream", cat: "Brand identity", file: "tile-n19-morado-cream.jpg", w: 768, h: 1344 },
+  { n: 38, group: "video", title: "Launch film", cat: "Brand film", file: "/video/launch-film-poster.jpg", w: 720, h: 1280, video: "/video/launch-film-preview.mp4", full: "/video/launch-film.mp4" },
   { n: 3, group: "photo", title: "Crater I", cat: "Campaign", file: "tile-n03-crater-i.webp", w: 900, h: 1600 },
   { n: 33, group: "illus", title: "Can I help you?", cat: "Illustration", file: "tile-n33-can-i-help-you.webp", w: 768, h: 1344 },
   { n: 9, group: "illus", title: "Open book", cat: "Illustration", file: "tile-n09-open-book.webp", w: 900, h: 1600 },
@@ -73,10 +78,11 @@ const PIECES: Piece[] = [
 ];
 
 const LANES = [
-  { f: "all", label: "All work", count: "34" },
+  { f: "all", label: "All work", count: "36" },
   { f: "brand", label: "Brand campaigns", count: "13" },
   { f: "photo", label: "Photographic campaigns", count: "11" },
   { f: "illus", label: "Illustration", count: "10" },
+  { f: "video", label: "Videos", count: "02" },
 ];
 
 const WHY = [
@@ -229,10 +235,10 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
     update();
 
     // ===== Showcase wall =====
-    type Item = { n: number; g: string; title: string; cat: string; alt: string; src: string };
+    type Item = { n: number; g: string; title: string; cat: string; alt: string; src: string; video?: string; full?: string };
     const DATA: Item[] = PIECES.map((p) => ({
       n: p.n, g: p.group, title: p.title, cat: p.cat,
-      alt: `${p.title}, ${p.cat.toLowerCase()}`, src: `/images/${p.file}`,
+      alt: `${p.title}, ${p.cat.toLowerCase()}`, src: p.file.startsWith("/") ? p.file : `/images/${p.file}`, video: p.video, full: p.full,
     }));
     const wall = document.getElementById("wall")!;
     const expand = document.getElementById("expand")!;
@@ -259,10 +265,25 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         b.tabIndex = -1;
         b.setAttribute("aria-hidden", "true");
       } else b.setAttribute("aria-label", "Expand " + d.title);
-      const img = document.createElement("img");
-      img.src = d.src;
-      img.alt = dup ? "" : d.alt;
-      img.decoding = "async";
+      let media: HTMLImageElement | HTMLVideoElement;
+      if (d.video) {
+        // Muted loop on its poster; the source is attached and played only near the screen (tileVideoIo)
+        const v = document.createElement("video");
+        v.poster = d.src;
+        v.dataset.src = d.video;
+        v.muted = true;
+        v.loop = true;
+        v.playsInline = true;
+        v.preload = "none";
+        v.setAttribute("aria-hidden", "true");
+        media = v;
+      } else {
+        const img = document.createElement("img");
+        img.src = d.src;
+        img.alt = dup ? "" : d.alt;
+        img.decoding = "async";
+        media = img;
+      }
       const cap = document.createElement("span");
       cap.className = "cap";
       const t = document.createElement("span");
@@ -270,9 +291,21 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
       const k = document.createElement("span");
       k.textContent = d.cat;
       cap.append(t, k);
-      b.append(img, cap);
+      b.append(media, cap);
       return b;
     }
+
+    const tileVideoIo = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          const v = e.target as HTMLVideoElement;
+          if (e.isIntersecting) {
+            if (!v.getAttribute("src") && v.dataset.src) v.src = v.dataset.src;
+            if (!reduce.matches) v.play().catch(() => {});
+          } else v.pause();
+        }),
+      { rootMargin: "25% 0px" }
+    );
 
     function buildWall(items: Item[]) {
       wall.innerHTML = "";
@@ -295,6 +328,8 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         col.appendChild(shift);
         wall.appendChild(col);
       }
+      tileVideoIo.disconnect();
+      wall.querySelectorAll<HTMLVideoElement>("video").forEach((v) => tileVideoIo.observe(v));
       laneRo.disconnect();
       laneState = [...wall.querySelectorAll<HTMLElement>(".col")].map((col) => {
         const track = col.querySelector<HTMLElement>(".track")!;
@@ -384,6 +419,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
     // Lightbox
     const lb = document.getElementById("lb") as HTMLDialogElement;
     const lbImg = document.getElementById("lbImg") as HTMLImageElement;
+    const lbVid = document.getElementById("lbVid") as HTMLVideoElement;
     const lbTitle = document.getElementById("lbTitle")!;
     const lbCount = document.getElementById("lbCount")!;
     let list: Item[] = [];
@@ -391,8 +427,21 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
     function show(i: number) {
       idx = (i + list.length) % list.length;
       const d = list[idx];
-      lbImg.src = d.src;
-      lbImg.alt = d.alt;
+      if (d.full) {
+        lbImg.hidden = true;
+        lbVid.hidden = false;
+        lbVid.poster = d.src;
+        lbVid.src = d.full;
+        lbVid.setAttribute("aria-label", d.alt);
+        lbVid.play().catch(() => {});
+      } else {
+        lbVid.pause();
+        lbVid.removeAttribute("src");
+        lbVid.hidden = true;
+        lbImg.hidden = false;
+        lbImg.src = d.src;
+        lbImg.alt = d.alt;
+      }
       lbTitle.textContent = d.title + ", " + d.cat;
       lbCount.textContent = idx + 1 + " / " + list.length;
     }
@@ -415,6 +464,8 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
       if (e.target === lb || (e.target as HTMLElement).classList.contains("lb-inner")) lb.close();
     };
     lb.addEventListener("click", onLbBackdrop);
+    const onLbClose = () => lbVid.pause();
+    lb.addEventListener("close", onLbClose);
     const onLbKeydown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") show(idx + 1);
       if (e.key === "ArrowLeft") show(idx - 1);
@@ -681,6 +732,8 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
       window.removeEventListener("resize", onResize2);
       window.removeEventListener("load", onLoad2);
       lb.removeEventListener("click", onLbBackdrop);
+      lb.removeEventListener("close", onLbClose);
+      tileVideoIo.disconnect();
       lb.removeEventListener("keydown", onLbKeydown);
       lb.removeEventListener("touchstart", onTouchStart);
       lb.removeEventListener("touchend", onTouchEnd);
@@ -1151,6 +1204,7 @@ export default function HomeClient({ featured, wideFilm }: { featured: Featured[
         </div>
         <div className="lb-inner">
           <img id="lbImg" alt="" />
+          <video id="lbVid" controls loop muted playsInline preload="none" hidden />
         </div>
         <div className="lb-bottom">
           <button type="button" id="lbPrev">
